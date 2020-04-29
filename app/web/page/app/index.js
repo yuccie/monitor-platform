@@ -5,6 +5,7 @@ import index from './index.vue';
 import createStore from './store';
 import createRouter from './router';
 
+
 const options = { base: '/' };
 
 export default new App({

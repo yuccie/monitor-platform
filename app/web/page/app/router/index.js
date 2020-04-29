@@ -2,7 +2,7 @@ import Vue from 'vue';
 
 import VueRouter from 'vue-router';
 
-import ListView from './list';
+import ListView from '../views/list';
 
 Vue.use(VueRouter);
 
@@ -21,7 +21,7 @@ export default function createRouter() {
       },
       {
         path: '/detail/:id',
-        component: () => import('./detail')
+        component: () => import('../views/detail')
       }
     ]
   });

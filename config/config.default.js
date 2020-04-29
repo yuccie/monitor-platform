@@ -47,5 +47,13 @@ module.exports = app => {
     },
   };
 
+  exports.cors = {
+    // origin: ctx => ctx.get('origin'),
+    origin: '*',
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+    // 下面这条加上才能共享跨域session，同时前端ajax请求也要加上响应的参数
+    // credentials: true,
+  };
+
   return exports;
 };

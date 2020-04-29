@@ -3,6 +3,10 @@ import { sync } from 'vuex-router-sync';
 import './vue/filter';
 import './vue/directive';
 
+import 'element-ui/lib/theme-chalk/index.css';
+import ElementUI from 'element-ui';
+Vue.use(ElementUI);
+
 export default class App {
   constructor(config) {
     this.config = config;

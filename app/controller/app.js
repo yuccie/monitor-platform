@@ -5,6 +5,7 @@ class AppController extends Controller {
     const {app, ctx} = this;
     const { mode } = ctx.query;
     if (mode === 'csr') {
+      console.log(11)
       // 根据参数来定是否客户端渲染
       await ctx.renderClient('app.js', { url: ctx.url });
     } else  {

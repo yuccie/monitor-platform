@@ -21,13 +21,15 @@ module.exports = {
   // 需要开启rules并添加loaders
   rules: [
     { scss: true },
-   ],
-  loaders:{
+  ],
+  loaders: {
     scss: {
       options: {
-        includePaths: [
-          path.resolve(process.cwd(), 'app/web/page')
-        ]
+        sassOptions: {
+          includePaths: [
+            path.resolve(process.cwd(), 'app/web/page')
+          ]
+        }
       }
     }
   },
@@ -59,5 +61,35 @@ module.exports = {
   // },
   // done(){
   //   // Webpack 编译完成回调, 默认可以不用配置,当你需要编译完成做某某事情(比如上传cdn)才需要配置
-  // }
-};
+  // },
+
+  // Egg 服务端渲染项目时，devServer 配置是无需的，即使配置了也无效。
+  // 代理和historyApiFallback通过项目的 Node 服务处理。
+  devServer: {
+    open: false,
+    // open: 'http://127.0.0.1:8888',
+
+    // https://webpack.js.org/configuration/dev-server/#devserver-before
+    before: before => {
+      // register koa middleware
+    },
+
+    // https://webpack.js.org/configuration/dev-server/#devserver-after
+    after: app => {
+      // register koa middleware
+    },
+
+    // https://webpack.js.org/configuration/dev-server/#devserver-proxy
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:3000',
+    //     pathRewrite: { '^/api': '' }
+    //   }
+    // },
+
+    // https://webpack.js.org/configuration/dev-server/#devserver-historyapifallback
+    historyApiFallback: {
+      index: '/app.html' // 默认 index.html
+    }
+  }
+}

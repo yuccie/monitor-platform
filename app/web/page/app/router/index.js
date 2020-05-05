@@ -22,7 +22,11 @@ export default function createRouter() {
       {
         path: '/detail/:id',
         component: () => import('../views/detail')
-      }
+      },
+      {
+        path: '/useSkills',
+        component: () => import('../views/useSkills')
+      },
     ]
   });
 }

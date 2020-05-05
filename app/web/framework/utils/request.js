@@ -69,7 +69,7 @@ service.interceptors.request.use(
       message: '加载中...',
       type: 'info'
     })
-    debugger
+    // debugger
     // Message.loading({
     //   message: '处理中...',
     //   forbidClick: true,

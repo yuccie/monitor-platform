@@ -8,15 +8,15 @@ import ElementUI from 'element-ui';
 Vue.use(ElementUI);
 
 // 
-Vue.config.errorHandler = (err, vm, info) => {
-  // throw new Error(err);
-  let { message, name, script, line, column, stack } = err;
-  debugger
-  let stackStr = stack ? stack.toString() : `${name}:${message}`;
-    debugger
-  console.log(stackStr); 
-  console.log(`cusError: ${err.toString()}\nInfo: ${info}\nvm：${Object.keys(vm)}`);
-}
+// Vue.config.errorHandler = (err, vm, info) => {
+//   // throw new Error(err);
+//   let { message, name, script, line, column, stack } = err;
+//   debugger
+//   let stackStr = stack ? stack.toString() : `${name}:${message}`;
+//     debugger
+//   console.log(stackStr); 
+//   console.log(`cusError: ${err.toString()}\nInfo: ${info}\nvm：${Object.keys(vm)}`);
+// }
 
 export default class App {
   constructor(config) {

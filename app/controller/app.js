@@ -23,7 +23,7 @@ class AppController extends Controller {
       // let myDb = await app.model.User.find(); // egg是集合
       // console.log('myDb', myDb);
 
-      console.log('ctx.url', ctx.url);
+      // console.log('ctx.url', ctx.url);
       // ctx.body = 'aa'
       
       // 这里的app.js如何自定义？

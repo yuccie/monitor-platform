@@ -20,6 +20,7 @@ import {mapState, mapActions} from 'vuex';
       ...mapActions(['getArticleDetail'])
     },
     created() {
+      console.log(q)
       const {id} = this.$route.params;
       this.getArticleDetail({id});
     },

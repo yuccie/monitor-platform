@@ -7,6 +7,11 @@ import 'element-ui/lib/theme-chalk/index.css';
 import ElementUI from 'element-ui';
 Vue.use(ElementUI);
 
+
+import '../asset/js/sdk';
+// 服务端渲染时没有window，会尝试客户端渲染
+Vue.use(window.monitor.vuePlugin);
+
 // 
 // Vue.config.errorHandler = (err, vm, info) => {
 //   // throw new Error(err);

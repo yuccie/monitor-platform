@@ -62,7 +62,8 @@ export default {
       //   console.log('errData', errData);
       // }
       // debugger
-      throw new Error('故意抛出错误');
+      console.log(aaa)
+      // throw new Error('故意抛出错误');
     }
   },
   mounted() {

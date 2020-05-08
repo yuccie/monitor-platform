@@ -87,6 +87,7 @@ function _getValType(val) {
 
 // 采集
 function collect(error, key) {
+  debugger
   // 没有次数，则赋值为0，其实就是统计次数
   pushCount[key] = pushCount[key] || 0;
   // 如果同一个错误次数小于 配置项，则累加
@@ -99,8 +100,8 @@ function collect(error, key) {
 
 // 推送，将队列里的错误推到远程
 function push() {
-  debugger
   for (var i = 0; i < queue.length; i++) {
+      debugger
     monitor.push(queue[i]);
   }
   queue = [];
@@ -108,6 +109,7 @@ function push() {
 
 // 定时推送，循环嵌套，推一次就会再次设定定时器
 function go() {
+  // debugger
   pushTimer = setTimeout(function () {
     push();
     go();

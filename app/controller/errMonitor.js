@@ -5,6 +5,10 @@ class ErrMonitorController extends Controller {
     const {app, ctx} = this;
     console.log(ctx.request, '/app/web/asset/js/');
   }
+  async getError() {
+    const {app, ctx} = this;
+    console.log(ctx.request, '/app/web/asset/js/');
+  }
 }
 
 module.exports = ErrMonitorController;

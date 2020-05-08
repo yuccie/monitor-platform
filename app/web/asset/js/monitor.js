@@ -5,7 +5,7 @@
 var stackparser = require('./stackparser');
 function Monitor() {
   // this._api = API_ROOT_URL + '/push';
-  this._api = '/push';
+  this._api = `/push?_csrf=${document.cookie.split('=')[1]}`;
   this._handlers = {};
   this._config = {
     ignore: {},
@@ -124,6 +124,8 @@ fn.watch = function (fun, context) {
 }
 
 fn._setEmail = function (error) {
+  // 这里可以将传入的相关人的邮箱传入，然后再error对象上挂载这个email
+  // 后续可以利用这个email，给相关人发送邮件。
   if (this._config.email) {
     error.email = typeof this._config.email === 'function'
       ? this._config.email(error)
@@ -169,12 +171,14 @@ fn._parse = function (error) {
 
 /**
  * 发送异常信息到服务端
+ * 利用原生ajax发送
  */
 fn._request = function (error) {
   var self = this;
   var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
   xhr.responseType = 'json';
   xhr.onreadystatechange = function () {
+    debugger
     if (xhr.readyState == 4) {
       if (xhr.status == 200 && xhr.response.code == '00000') {
         self.emit('pushSuccess', [error]);
@@ -187,6 +191,13 @@ fn._request = function (error) {
   }
   xhr.open('POST', this._api, true);
   xhr.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+  //   xsrfHeaderName: 'x-csrf-token',
+  // xsrfCookieName: 'csrfToken'
+  console.log(document.cookie.split('=')[1], 'cookies')
+  debugger
+  // xhr.setRequestHeader('xsrfHeaderName', 'x-csrf-token');
+  // xhr.setRequestHeader('xsrfCookieName', 'csrfToken');
+  // xhr.setRequestHeader('csrfToken', document.cookie.split('=')[1]);
   xhr.send(JSON.stringify(error));
 }
 

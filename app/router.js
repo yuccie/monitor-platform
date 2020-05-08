@@ -6,4 +6,5 @@ module.exports = app => {
 
   // 增加异常监控
   app.get('/app/web/asset/js/*', app.controller.errMonitor.getSdk);
+  app.post('/push', app.controller.errMonitor.getError);
 };

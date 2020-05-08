@@ -22,6 +22,7 @@ monitor.vuePlugin = {
     // 先缓存，再调用，防止覆盖
     var errorHandler = Vue.config.errorHandler;
     Vue.config.errorHandler = function (error) {
+      debugger
       error = error || {};
       error.stack = error.stack;
       error.message = error.message;
@@ -109,7 +110,7 @@ function push() {
 
 // 定时推送，循环嵌套，推一次就会再次设定定时器
 function go() {
-  // debugger
+  debugger
   pushTimer = setTimeout(function () {
     push();
     go();

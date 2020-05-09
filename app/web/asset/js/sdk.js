@@ -12,17 +12,14 @@ var pushTimer = null;
 
 var recentClickEventList = []; // 最近的10条点击事件；
 var recentAjaxList = []; // 最近10条ajax接口请求；
-debugger
 win.monitor = monitor;
 
 // 注册vue的插件，先搜集错误，再调用应用配置的错误处理，再抛出错误
 monitor.vuePlugin = {
   install: function (Vue, options) {
-    debugger
     // 先缓存，再调用，防止覆盖
     var errorHandler = Vue.config.errorHandler;
     Vue.config.errorHandler = function (error) {
-      debugger
       error = error || {};
       error.stack = error.stack;
       error.message = error.message;
@@ -37,7 +34,6 @@ monitor.vuePlugin = {
 
 // 记录点击事件发生时的信息
 win.onclick = function(e) {
-  debugger
   let onClickEvent = Object.assign({}, {
     innerText: e.target.innerText,
     pageX: e.pageX,
@@ -56,7 +52,7 @@ win.onclick = function(e) {
 
 win.onerror = function (message, fileName, lineNumber, columnNumber, error) {
   console.log('arguments', arguments, _getValType(error));
-  debugger
+
   // 搜集错误因为不太紧急，可以放在队列里
   setTimeout(() => {
     error = error || {};
@@ -88,7 +84,6 @@ function _getValType(val) {
 
 // 采集
 function collect(error, key) {
-  debugger
   // 没有次数，则赋值为0，其实就是统计次数
   pushCount[key] = pushCount[key] || 0;
   // 如果同一个错误次数小于 配置项，则累加
@@ -102,7 +97,6 @@ function collect(error, key) {
 // 推送，将队列里的错误推到远程
 function push() {
   for (var i = 0; i < queue.length; i++) {
-      debugger
     monitor.push(queue[i]);
   }
   queue = [];
@@ -110,7 +104,6 @@ function push() {
 
 // 定时推送，循环嵌套，推一次就会再次设定定时器
 function go() {
-  debugger
   pushTimer = setTimeout(function () {
     push();
     go();

@@ -55,5 +55,11 @@ module.exports = app => {
     // credentials: true,
   };
 
+  exports.security = {
+    csrf: {
+      enable: false
+    }
+  }
+
   return exports;
 };

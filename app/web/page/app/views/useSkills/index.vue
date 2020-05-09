@@ -3,6 +3,14 @@
     <h4 class="title">{{msg}}</h4>
 
     <div class="item">
+      <el-button type="primary" round @click="getErr">获取异常</el-button>
+      <el-button type="success" round @click="delErr">删除数据库里数据</el-button>
+      <el-button type="info" round>信息按钮</el-button>
+      <el-button type="warning" round>警告按钮</el-button>
+      <el-button type="danger" round>危险按钮</el-button>
+    </div>
+
+    <div class="item">
       <p class="desc">chart示例：</p>
       <div id="chartDemo"></div>
     </div>
@@ -22,6 +30,7 @@
 
 <script>
 import { Chart } from '@antv/g2';
+import { getErr, delErr } from 'framework/vue/apis';
 export default {
   data() {
     return {
@@ -62,15 +71,33 @@ export default {
       //   console.log('errData', errData);
       // }
       // debugger
-      console.log(aaa)
+      console.log(aaa);
       // throw new Error('故意抛出错误');
+    },
+    async getErr() {
+      try {
+        let res = await getErr();
+        console.log('res', res);
+      } catch(err) {
+        console.log(err);
+      }
+    },
+    async delErr() {
+      try {
+        let res = await delErr();
+        console.log('res', res);
+      } catch(err) {
+        console.log(err);
+      }
     }
   },
   mounted() {
     this.initChart();
     this.initError();
   },
-  created() {}
+  created() {
+    this.getErr();
+  }
 };
 </script>
 

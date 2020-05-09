@@ -1,12 +1,20 @@
 /**
- * Created by hanan on 17/11/14.
+ * 1，每个应用的返回的response不同，code码不同，是否通过配置传入？
+ * 2，现在暂时关闭了csrf，因为还没想到一种更加无痕的方式，但最好开启
  */
 
 var stackparser = require('./stackparser');
 function Monitor() {
   // this._api = API_ROOT_URL + '/push';
-  this._api = `/push?_csrf=${document.cookie.split('=')[1]}`;
-  this._handlers = {};
+  this._api = `/pushErr`;
+  this._handlers = {
+    pushSuccess(data) {
+      console.log('推送异常至服务器成功');
+    },
+    pushFailed(data) {
+      console.log('推送异常至服务器失败');
+    }
+  };
   this._config = {
     ignore: {},
     interval: 1 * 1000,
@@ -138,8 +146,10 @@ fn._setEmail = function (error) {
  * 解析异常信息
  */
 fn._parse = function (error) {
+  const self = this;
   var stack = error.stack ? stackparser.parse(error) : '';
   var defaulteValues = this._config.defaulteValues;
+
   var obj = {
     name: error.name,
     title: error.title || document.title,
@@ -163,10 +173,42 @@ fn._parse = function (error) {
     recentAjaxList: error.recentAjaxList || null,
     cookies: document.cookie || null,
   }
-  // for (var key in obj) {
-  //   obj[key] = obj[key] || '';
-  // }
   return obj;
+
+  // 如何串行添加定位，定位还需要无感知？获取定位耗时吗？
+  // if (navigator.geolocation) {
+  //   self._getPosition().then(geolocation => {
+  //     obj.geolocation = geolocation;
+  //     Promise.resolve(obj)
+  //   }).catch(err => console.log(`获取经纬度失败：${err}`));
+  // } else {
+  //   return obj;
+  // } 
+}
+
+/**
+ * 在支持经纬度的浏览，获取经纬度
+ */
+fn._getPosition = function() {
+  let self = this;
+  return new Promise((resolve, reject) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        console.log('position', position);
+        let latitude = position.coords.latitude
+        let longitude = position.coords.longitude
+        let data = {
+          latitude: latitude,
+          longitude: longitude
+        }
+        resolve(data)
+      }, function () {
+        reject(arguments)
+      })
+    } else {
+      reject('你的浏览器不支持当前地理位置信息获取')
+    }
+  })
 }
 
 /**
@@ -178,12 +220,10 @@ fn._request = function (error) {
   var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
   xhr.responseType = 'json';
   xhr.onreadystatechange = function () {
-    debugger
     if (xhr.readyState == 4) {
-      if (xhr.status == 200 && xhr.response.code == '00000') {
+      if (xhr.status === 200 && xhr.response.code === 0) {
         self.emit('pushSuccess', [error]);
-      }
-      else {
+      } else {
         self.emit('pushFailed', [error]);
       }
       self.emit('completePush', [error]);
@@ -191,13 +231,6 @@ fn._request = function (error) {
   }
   xhr.open('POST', this._api, true);
   xhr.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
-  //   xsrfHeaderName: 'x-csrf-token',
-  // xsrfCookieName: 'csrfToken'
-  console.log(document.cookie.split('=')[1], 'cookies')
-  debugger
-  // xhr.setRequestHeader('xsrfHeaderName', 'x-csrf-token');
-  // xhr.setRequestHeader('xsrfCookieName', 'csrfToken');
-  // xhr.setRequestHeader('csrfToken', document.cookie.split('=')[1]);
   xhr.send(JSON.stringify(error));
 }
 
@@ -219,12 +252,15 @@ fn.on = function (event, callback) {
 // 触发事件
 fn.emit = function (event, args) {
   if (this._handlers[event] && this._handlers[event].length) {
-    var callbacks = this._handlers[event];
+    var callbacks = [];
+    callbacks.push(this._handlers[event]);
+
     for (var i = 0; i <= callbacks.length; i++) {
       if (typeof callbacks[i] == 'function') {
         callbacks[i].apply(this, args);
       }
     }
+    callbacks =  [];
   }
   return this;
 }

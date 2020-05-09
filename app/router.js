@@ -2,9 +2,12 @@
 module.exports = app => {
   app.get('/api/article/list', app.controller.app.list);
   app.get('/api/article/:id', app.controller.app.detail);
-  app.get('/*', app.controller.app.index);
 
   // 增加异常监控
   app.get('/app/web/asset/js/*', app.controller.errMonitor.getSdk);
-  app.post('/push', app.controller.errMonitor.getError);
+  app.post('/pushErr', app.controller.errMonitor.pushErr);
+  app.get('/getErr', app.controller.errMonitor.getErr);
+
+  // 务必放到最后
+  app.get('/*', app.controller.app.index);
 };

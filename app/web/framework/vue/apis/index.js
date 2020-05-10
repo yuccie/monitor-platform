@@ -27,3 +27,12 @@ export function delErr(data) {
   });
 }
 
+// 更新异常信息
+export function updateErr(data) {
+  return request({
+    url: `/updateErr`,
+    method: 'get', // 默认post
+    params: data,
+  });
+}
+

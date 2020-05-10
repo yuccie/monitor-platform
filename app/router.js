@@ -7,6 +7,8 @@ module.exports = app => {
   app.get('/app/web/asset/js/*', app.controller.errMonitor.getSdk);
   app.post('/pushErr', app.controller.errMonitor.pushErr);
   app.get('/getErr', app.controller.errMonitor.getErr);
+  app.get('/delErr', app.controller.errMonitor.delErr);
+  app.get('/updateErr', app.controller.errMonitor.updateErr);
 
   // 务必放到最后
   app.get('/*', app.controller.app.index);

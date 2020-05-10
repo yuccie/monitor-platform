@@ -33,7 +33,9 @@ module.exports = app => {
 
   exports.middleware = [
     'locals',
-    'access'
+    'access',
+    'errHandler',
+    'reqHandler'
   ];
 
   // 增加mongoose

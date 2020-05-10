@@ -6,7 +6,7 @@
   </div>
 </template>
 <style>
-  @import "content.css";
+  /* @import "content.css"; */
 </style>
 <script type="text/babel">
   export default{

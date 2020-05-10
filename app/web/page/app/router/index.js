@@ -3,6 +3,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import ListView from '../views/list';
+// import Home from '../views/home';
 
 Vue.use(VueRouter);
 
@@ -13,7 +14,8 @@ export default function createRouter() {
     routes: [
       {
         path: '/',
-        component: ListView
+        name: 'Home',
+        component: () => import('../views/home/'),
       },
       {
         path: '/list',

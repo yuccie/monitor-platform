@@ -3,8 +3,9 @@
     <h4 class="title">{{msg}}</h4>
 
     <div class="item">
-      <el-button type="primary" round @click="getErr">获取异常</el-button>
-      <el-button type="success" round @click="delErr">删除数据库里数据</el-button>
+      <el-button type="primary" round @click="getErr">获取异常数据</el-button>
+      <el-button type="success" round @click="delErr">删除异常数据</el-button>
+      <el-button type="success" round @click="updateErr">更新异常数据</el-button>
       <el-button type="info" round>信息按钮</el-button>
       <el-button type="warning" round>警告按钮</el-button>
       <el-button type="danger" round>危险按钮</el-button>
@@ -30,7 +31,7 @@
 
 <script>
 import { Chart } from '@antv/g2';
-import { getErr, delErr } from 'framework/vue/apis';
+import { getErr, delErr, updateErr } from 'framework/vue/apis';
 export default {
   data() {
     return {
@@ -89,7 +90,15 @@ export default {
       } catch(err) {
         console.log(err);
       }
-    }
+    },
+    async updateErr() {
+      try {
+        let res = await updateErr();
+        console.log('res', res);
+      } catch(err) {
+        console.log(err);
+      }
+    },
   },
   mounted() {
     this.initChart();
@@ -110,6 +119,7 @@ export default {
   .item {
     display: flex;
     align-content: center;
+    margin-bottom: 50px;
     .desc {
       color: brown;
       font-weight: 600;

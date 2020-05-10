@@ -41,8 +41,9 @@ export default {
   },
   computed: {
     isNode() {
+      // https://hubcarl.github.io/easywebpack/webpack/env/
       // EASY_ENV_IS_NODE在哪里配置？
-      return EASY_ENV_IS_NODE;
+      return EASY_ENV_IS_NODE; // 是否是Node运行构建模式, 也就是 server side render
     }
   }
 };

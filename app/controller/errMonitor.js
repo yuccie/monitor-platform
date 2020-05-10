@@ -16,10 +16,11 @@ class ErrMonitorController extends Controller {
     //   body: ctx.request.body
     // };
     let errInfo = ctx.request.body;
+    console.log('errInfo', errInfo);
     errInfo.userAgent = ctx.request.header['user-agent'];
 
-    await ctx.model.ErrMonitor.create(errInfo);
-    let res = await ctx.model.ErrMonitor.find({});
+    // await ctx.model.ErrMonitor.create(errInfo);
+    // let res = await ctx.model.ErrMonitor.find({});
     // console.log(res, 'res');
 
     // const errMonitor = new ctx.model.ErrMonitor({
@@ -58,9 +59,13 @@ class ErrMonitorController extends Controller {
     // 支持删除多条或单条，要想删除某条或多条数据，
     // 需要一定的过滤条件，也就是如何给每项数据添加一个id？
     const { ctx } = this;
+    // let opts = {
+    //   name: 'jesse'
+    // }
     let opts = {
-      name: 'jesse'
+      _id: "5eb7c6fc95040d060636ee51"
     }
+
     await ctx.model.ErrMonitor.remove(opts, err => {
       if (err) throw err;
     })
@@ -72,11 +77,30 @@ class ErrMonitorController extends Controller {
   }
   async getErr() {
     const { ctx } = this;
+
     let res = await ctx.model.ErrMonitor.find({});
+    // console.log('res', res);
+    await ctx.reqHandler.success(res);
+
+    // ctx.body = {
+    //   code: 0,
+    //   message: '操作成功',
+    //   data: res
+    // };
+  }
+  async updateErr() {
+    const { ctx } = this;
+    let query = {
+      _id: '5eb7c743c83b48065550ab6f'
+    }
+    await ctx.model.ErrMonitor.update(query, {
+      cookies: '这是更新的cookies'
+    });
+
     ctx.body = {
       code: 0,
       message: '操作成功',
-      data: res
+      data: {}
     };
   }
 }

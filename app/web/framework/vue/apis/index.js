@@ -36,3 +36,12 @@ export function updateErr(data) {
   });
 }
 
+// 更新异常信息
+export function getPerf(data) {
+  return request({
+    url: `/getPerf`,
+    method: 'get',
+    params: data,
+  });
+}
+

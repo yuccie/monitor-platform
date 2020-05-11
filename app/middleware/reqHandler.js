@@ -12,7 +12,6 @@ module.exports = (opts, app) => {
   return async function (ctx, next) {
     ctx.reqHandler = {
       success(data = {}, msg = '操作成功') {
-        console.log('data111', data[1]);
         ctx.body = {
           code: 0,
           msg,

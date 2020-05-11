@@ -1,7 +1,7 @@
 const fs = require('fs');
 const Controller = require('egg').Controller;
 
-class ErrMonitorController extends Controller {
+class ErrDbsController extends Controller {
   async getSdk() {
     const {app, ctx} = this;
     console.log(ctx.request, '/app/web/asset/js/');
@@ -16,23 +16,22 @@ class ErrMonitorController extends Controller {
     //   body: ctx.request.body
     // };
     let errInfo = ctx.request.body;
-    console.log('errInfo', errInfo);
     errInfo.userAgent = ctx.request.header['user-agent'];
 
-    // await ctx.model.ErrMonitor.create(errInfo);
-    // let res = await ctx.model.ErrMonitor.find({});
+    await ctx.model.ErrDbs.create(errInfo);
+    // let res = await ctx.model.ErrDbs.find({});
     // console.log(res, 'res');
 
-    // const errMonitor = new ctx.model.ErrMonitor({
+    // const errMonitor = new ctx.model.ErrDbs({
     //   name: 'jesse',
     //   age: 25,
     //   date: new Date(),
     //   // 如果schema里没有定义，这里即使传入也不会生效
     //   a: 21
     // })
-    // const errMonitor = new ctx.model.ErrMonitor(errInfo)
+    // const errMonitor = new ctx.model.ErrDbs(errInfo)
     // errMonitor.save();
-    // let res = await ctx.model.ErrMonitor.find({});
+    // let res = await ctx.model.ErrDbs.find({});
     // console.log('res', res);
 
     // console.log('process.cwd()', process.cwd());
@@ -63,10 +62,11 @@ class ErrMonitorController extends Controller {
     //   name: 'jesse'
     // }
     let opts = {
-      _id: "5eb7c6fc95040d060636ee51"
+      // _id: "5eb7c6fc95040d060636ee51"
+      name: 'ReferenceError'
     }
 
-    await ctx.model.ErrMonitor.remove(opts, err => {
+    await ctx.model.ErrDbs.remove(opts, err => {
       if (err) throw err;
     })
     ctx.body = {
@@ -77,23 +77,23 @@ class ErrMonitorController extends Controller {
   }
   async getErr() {
     const { ctx } = this;
-
-    let res = await ctx.model.ErrMonitor.find({});
-    // console.log('res', res);
+    console.log('ctx.model', ctx.model)
+    let res = await ctx.model.ErrDbs.find({});
+    console.log('res', res);
     await ctx.reqHandler.success(res);
 
     // ctx.body = {
     //   code: 0,
     //   message: '操作成功',
     //   data: res
-    // };
+    // };x
   }
   async updateErr() {
     const { ctx } = this;
     let query = {
       _id: '5eb7c743c83b48065550ab6f'
     }
-    await ctx.model.ErrMonitor.update(query, {
+    await ctx.model.ErrDbs.update(query, {
       cookies: '这是更新的cookies'
     });
 
@@ -105,4 +105,4 @@ class ErrMonitorController extends Controller {
   }
 }
 
-module.exports = ErrMonitorController;
+module.exports = ErrDbsController;

@@ -2,36 +2,47 @@
   <div class="skills">
     <h4 class="title">{{msg}}</h4>
 
-    <div class="item">
-      <el-button type="primary" round @click="getErr">获取异常数据</el-button>
-      <el-button type="success" round @click="delErr">删除异常数据</el-button>
-      <el-button type="success" round @click="updateErr">更新异常数据</el-button>
-      <el-button type="info" round>信息按钮</el-button>
-      <el-button type="warning" round>警告按钮</el-button>
-      <el-button type="danger" round>危险按钮</el-button>
-    </div>
-
-    <div class="item">
-      <p class="desc">chart示例：</p>
-      <div id="chartDemo"></div>
-    </div>
-
-    <div class="item">
-      <p class="desc">window.onerror示例：</p>
-      <div class="err-list">
-        <p>{{ `异常信息：${errData.errMsg}` }}</p>
-        <p>{{ `异常文件路径：${errData.scriptURI}` }}</p>
-        <p>{{ `异常行号：${errData.lineNo}` }}</p>
-        <p>{{ `异常列号：${errData.columnNo}` }}</p>
-        <p>{{ `异常堆栈信息：${errData.error}` }}</p>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>egg-mongoose 使用示例</span>
+        <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
       </div>
-    </div>
+      <div class="item">
+        <el-button type="primary" round @click="getErr">获取异常数据</el-button>
+        <el-button type="success" round @click="delErr">删除异常数据</el-button>
+        <el-button type="success" round @click="updateErr">更新异常数据</el-button>
+        <el-button type="info" round @click="getPerf">测试新数据库集合</el-button>
+        <el-button type="warning" round>待定</el-button>
+        <el-button type="danger" round>待定</el-button>
+      </div>
+    </el-card>
+
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>g2 chart示例：</span>
+        <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+      </div>
+      <div id="chartDemo"></div>
+    </el-card>
+
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>window.onerror示例</span>
+        <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+      </div>
+      <div class="err-list">
+        <p>{{ `异常信息：${errData.message}` }}</p>
+        <p>{{ `异常文件路径：${errData.url}` }}</p>
+        <p>{{ `异常行号：${errData.lineNumber}` }}</p>
+        <p>{{ `异常列号：${errData.columnNumber}` }}</p>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script>
 import { Chart } from '@antv/g2';
-import { getErr, delErr, updateErr } from 'framework/vue/apis';
+import { getErr, delErr, updateErr, getPerf } from 'framework/vue/apis';
 export default {
   data() {
     return {
@@ -78,8 +89,11 @@ export default {
     async getErr() {
       try {
         let res = await getErr();
+        if (res && res.code === 0) {
+          this.errData = res.data[0];
+        }
         console.log('res', res);
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
     },
@@ -87,7 +101,7 @@ export default {
       try {
         let res = await delErr();
         console.log('res', res);
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
     },
@@ -95,7 +109,15 @@ export default {
       try {
         let res = await updateErr();
         console.log('res', res);
-      } catch(err) {
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getPerf() {
+      try {
+        let res = await getPerf();
+        console.log('res', res);
+      } catch (err) {
         console.log(err);
       }
     },
@@ -112,6 +134,7 @@ export default {
 
 <style lang="scss" scoped>
 .skills {
+  padding: 50px;
   .title {
     color: red;
     margin-bottom: 15px;
@@ -126,6 +149,9 @@ export default {
     }
     .err-list {
     }
+  }
+  .box-card {
+    margin: 50px auto;
   }
 }
 </style>

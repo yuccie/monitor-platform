@@ -103,6 +103,32 @@ class ErrDbsController extends Controller {
       data: {}
     };
   }
+
+  async getSqlErr() {
+    const { ctx } = this;
+
+    console.log(ctx.sqlModel.Posts, 'ctx.sqlModel.Posts');
+    // let res = await ctx.sqlModel.ErrDb.findAll({});
+    let res = await ctx.sqlModel.Posts.findAll({});
+    console.log('res', res);
+    await ctx.reqHandler.success(res);
+  }
+
+  async delSqlErr() {
+    const { ctx } = this;
+
+    let res = await ctx.sqlModel.ErrDb.findAll({});
+    console.log('res', res);
+    await ctx.reqHandler.success(res);
+  }
+
+  async updateSqlErr() {
+    const { ctx } = this;
+
+    let res = await ctx.sqlModel.ErrDb.findAll({});
+    console.log('res', res);
+    await ctx.reqHandler.success(res);
+  }
 }
 
 module.exports = ErrDbsController;

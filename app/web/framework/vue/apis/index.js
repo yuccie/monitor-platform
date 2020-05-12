@@ -36,10 +36,37 @@ export function updateErr(data) {
   });
 }
 
-// 更新异常信息
+// 测试连接不同的集合
 export function getPerf(data) {
   return request({
     url: `/getPerf`,
+    method: 'get',
+    params: data,
+  });
+}
+
+// 获取mysql里的异常数据
+export function getSqlErr(data) {
+  return request({
+    url: `/getSqlErr`,
+    method: 'get',
+    params: data,
+  });
+}
+
+// 删除mysql里的异常数据
+export function delSqlErr(data) {
+  return request({
+    url: `/delSqlErr`,
+    method: 'get',
+    params: data,
+  });
+}
+
+// 更新mysql里的异常数据
+export function updateSqlErr(data) {
+  return request({
+    url: `/updateSqlErr`,
     method: 'get',
     params: data,
   });

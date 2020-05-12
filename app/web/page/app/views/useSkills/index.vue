@@ -19,6 +19,21 @@
 
     <el-card class="box-card">
       <div slot="header" class="clearfix">
+        <span>mysql 使用示例</span>
+        <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+      </div>
+      <div class="item">
+        <el-button type="primary" round @click="getSqlErr">获取异常数据</el-button>
+        <el-button type="success" round @click="delSqlErr">删除异常数据</el-button>
+        <el-button type="success" round @click="updateSqlErr">更新异常数据</el-button>
+        <el-button type="info" round>待定</el-button>
+        <el-button type="warning" round>待定</el-button>
+        <el-button type="danger" round>待定</el-button>
+      </div>
+    </el-card>
+
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
         <span>g2 chart示例：</span>
         <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
       </div>
@@ -42,7 +57,16 @@
 
 <script>
 import { Chart } from '@antv/g2';
-import { getErr, delErr, updateErr, getPerf } from 'framework/vue/apis';
+import { getErr, delErr, updateErr, getPerf, getSqlErr, delSqlErr, updateSqlErr } from 'framework/vue/apis';
+const fnMap = {
+  'getErr': getErr,
+  'delErr': delErr,
+  'updateErr': updateErr,
+  'getPerf': getPerf,
+  'getSqlErr': getSqlErr,
+  'delSqlErr': delSqlErr,
+  'updateSqlErr': updateSqlErr,
+}
 export default {
   data() {
     return {
@@ -86,48 +110,58 @@ export default {
       console.log(aaa);
       // throw new Error('故意抛出错误');
     },
-    async getErr() {
-      try {
-        let res = await getErr();
-        if (res && res.code === 0) {
-          this.errData = res.data[0];
-        }
-        console.log('res', res);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async delErr() {
-      try {
-        let res = await delErr();
-        console.log('res', res);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async updateErr() {
-      try {
-        let res = await updateErr();
-        console.log('res', res);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async getPerf() {
-      try {
-        let res = await getPerf();
-        console.log('res', res);
-      } catch (err) {
-        console.log(err);
-      }
-    },
+    // async getErr() {
+    //   try {
+    //     let res = await getErr();
+    //     if (res && res.code === 0) {
+    //       this.errData = res.data[0];
+    //     }
+    //     console.log('res', res);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
+    // async delErr() {
+    //   try {
+    //     let res = await delErr();
+    //     console.log('res', res);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
+    // async updateErr() {
+    //   try {
+    //     let res = await updateErr();
+    //     console.log('res', res);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
+    // async getPerf() {
+    //   try {
+    //     let res = await getPerf();
+    //     console.log('res', res);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // },
   },
   mounted() {
     this.initChart();
     this.initError();
   },
   created() {
-    this.getErr();
+    // 初始化methods
+    ['getErr', 'delErr', 'updateErr', 'getPerf', 'getSqlErr', 'delSqlErr', 'updateSqlErr'].forEach(key => {
+      this[key] = async() => {
+        try {
+          let res = await fnMap[key]();
+          console.log('res', res);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    })
   }
 };
 </script>

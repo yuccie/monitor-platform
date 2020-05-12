@@ -49,6 +49,8 @@ module.exports = app => {
     },
   };
 
+  exports.sequelize = require('../database/config.json').development
+
   exports.cors = {
     // origin: ctx => ctx.get('origin'),
     origin: '*',

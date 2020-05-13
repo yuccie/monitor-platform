@@ -45,9 +45,9 @@ module.exports = {
   // },
   // 设置别名
   // resolve: {
-  //   alias: {
-  //     'vue$': 'vue/dist/vue.esm.js' 
-  //   }
+  alias: {
+    'asset': 'app/web/asset' 
+  },
   // },
   // deploy: {
   //   mode: "npm", // 支持 npm, cnpm, yarn, tnpm ,

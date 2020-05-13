@@ -72,7 +72,18 @@
 
 <script>
 import { Chart } from '@antv/g2';
-import { getErr, delErr, updateErr, getPerf, getSqlErr, delSqlErr, updateSqlErr, getRedisErr, delRedisErr, setRedisErr } from 'framework/vue/apis';
+import {
+  getErr,
+  delErr,
+  updateErr,
+  getPerf,
+  getSqlErr,
+  delSqlErr,
+  updateSqlErr,
+  getRedisErr,
+  delRedisErr,
+  setRedisErr
+} from 'framework/vue/apis';
 const fnMap = {
   getErr,
   delErr,
@@ -85,6 +96,7 @@ const fnMap = {
   delRedisErr,
   setRedisErr
 };
+
 export default {
   data() {
     return {
@@ -138,7 +150,7 @@ export default {
       } catch (err) {
         console.log(err);
       }
-    },
+    }
     // async delErr() {
     //   try {
     //     let res = await delErr();
@@ -171,18 +183,26 @@ export default {
   created() {
     this.getErr();
     // 初始化methods
-    ['delErr', 'updateErr', 'getPerf', 'getSqlErr', 'delSqlErr', 'updateSqlErr', 'getRedisErr', 'delRedisErr', 'setRedisErr'].forEach(
-      key => {
-        this[key] = async () => {
-          try {
-            let res = await fnMap[key]();
-            console.log('res', res);
-          } catch (err) {
-            console.log(err);
-          }
-        };
-      }
-    );
+    [
+      'delErr',
+      'updateErr',
+      'getPerf',
+      'getSqlErr',
+      'delSqlErr',
+      'updateSqlErr',
+      'getRedisErr',
+      'delRedisErr',
+      'setRedisErr'
+    ].forEach(key => {
+      this[key] = async () => {
+        try {
+          let res = await fnMap[key]();
+          console.log('res', res);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+    });
   }
 };
 </script>
@@ -201,8 +221,6 @@ export default {
     .desc {
       color: brown;
       font-weight: 600;
-    }
-    .err-list {
     }
   }
   .box-card {

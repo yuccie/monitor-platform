@@ -39,7 +39,6 @@ module.exports = app => {
   ];
 
   // 增加mongoose
-  // const adminMongodbUrl = 'mongodb://mfb:mfbadmin@10.2.4.166:28011/mfb_public';
   exports.mongoose = {
     clients: {
       monitor: {

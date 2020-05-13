@@ -3,6 +3,8 @@ const fs = require('fs');
 module.exports = app => {
   const exports = {};
 
+  exports.EGG_SERVER_ENV = 'local';
+
   exports.siteFile = {
     '/favicon.ico': fs.readFileSync(path.join(app.baseDir, 'app/web/asset/images/favicon.ico'))
   };

@@ -6,6 +6,8 @@ class ErrDbsController extends Controller {
     const {app, ctx} = this;
     console.log(ctx.request, '/app/web/asset/js/');
   }
+
+  // 操作mongoose里的数据
   async pushErr() {
     const {app, ctx} = this;
 
@@ -81,12 +83,6 @@ class ErrDbsController extends Controller {
     let res = await ctx.model.ErrDbs.find({});
     console.log('res', res);
     await ctx.reqHandler.success(res);
-
-    // ctx.body = {
-    //   code: 0,
-    //   message: '操作成功',
-    //   data: res
-    // };x
   }
   async updateErr() {
     const { ctx } = this;
@@ -104,30 +100,47 @@ class ErrDbsController extends Controller {
     };
   }
 
+  // 操作mysql里的数据
   async getSqlErr() {
     const { ctx } = this;
 
-    console.log(ctx.sqlModel.Posts, 'ctx.sqlModel.Posts');
-    // let res = await ctx.sqlModel.ErrDb.findAll({});
-    let res = await ctx.sqlModel.Posts.findAll({});
+    let res = await ctx.sqlModel.ErrDbs.findAll({});
     console.log('res', res);
     await ctx.reqHandler.success(res);
   }
-
   async delSqlErr() {
     const { ctx } = this;
 
-    let res = await ctx.sqlModel.ErrDb.findAll({});
+    let res = await ctx.sqlModel.ErrDbs.findAll({});
+    console.log('res', res);
+    await ctx.reqHandler.success(res);
+  }
+  async updateSqlErr() {
+    const { ctx } = this;
+
+    let res = await ctx.sqlModel.ErrDbs.findAll({});
     console.log('res', res);
     await ctx.reqHandler.success(res);
   }
 
-  async updateSqlErr() {
-    const { ctx } = this;
+  // 操作redis里的数据
+  async setRedisErr(newVal) {
+    const { ctx, app } = this;
+    console.log('res', app);
+    await app.redis.set('redisErr', '这是redis里的默认error');
+    await ctx.reqHandler.success('更新redis成功');
+  }
+  async getRedisErr() {
+    const { ctx, app } = this;
+    let res = await app.redis.get('redisErr');
+    if (!res) return ctx.reqHandler.fail(-1, '获取异常');
 
-    let res = await ctx.sqlModel.ErrDb.findAll({});
-    console.log('res', res);
     await ctx.reqHandler.success(res);
+  }
+  async delRedisErr() {
+    const { ctx, app } = this;
+    await app.redis.del('redisErr');
+    await ctx.reqHandler.success();
   }
 }
 

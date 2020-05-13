@@ -72,3 +72,30 @@ export function updateSqlErr(data) {
   });
 }
 
+// 获取redis里的异常数据
+export function getRedisErr(data) {
+  return request({
+    url: `/getRedisErr`,
+    method: 'get',
+    params: data,
+  });
+}
+
+// 更新mysql里的异常数据
+export function delRedisErr(data) {
+  return request({
+    url: `/delRedisErr`,
+    method: 'get',
+    params: data,
+  });
+}
+
+// 更新mysql里的异常数据
+export function setRedisErr(data) {
+  return request({
+    url: `/setRedisErr`,
+    method: 'get',
+    params: data,
+  });
+}
+

@@ -17,6 +17,11 @@ module.exports = app => {
   app.get('/delSqlErr', app.controller.err.delSqlErr);
   app.get('/updateSqlErr', app.controller.err.updateSqlErr);
 
+  // 操作redis里的方法
+  app.get('/getRedisErr', app.controller.err.getRedisErr);
+  app.get('/delRedisErr', app.controller.err.delRedisErr);
+  app.get('/setRedisErr', app.controller.err.setRedisErr);
+
   // 务必放到最后
   app.get('/*', app.controller.app.index);
 };

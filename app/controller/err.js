@@ -3,13 +3,13 @@ const Controller = require('egg').Controller;
 
 class ErrDbsController extends Controller {
   async getSdk() {
-    const {app, ctx} = this;
+    const { app, ctx } = this;
     console.log(ctx.request, '/app/web/asset/js/');
   }
 
   // 操作mongoose里的数据
   async pushErr() {
-    const {app, ctx} = this;
+    const { app, ctx } = this;
 
     // 关于浏览器的数据，请求就可以直接拿到，不需要单独调接口
     // user-agent：https://www.jianshu.com/p/c5cf6a1967d1
@@ -43,10 +43,10 @@ class ErrDbsController extends Controller {
     // 将入参格式化，并写入到本地文件
     // https://javascript.ruanyifeng.com/nodejs/fs.html#toc0
     // 这里的相对路径，其实是相当于 process.cwd() ，因此写到了根目录。而不是相对于当前脚本所在的路径。
-    fs.writeFileSync('./errData.js', JSON.stringify(errInfo, null, 2), (err) => {
+    fs.writeFileSync('./errData.js', JSON.stringify(errInfo, null, 2), err => {
       // 回调是最后一个参数，而且只有写入异常时才会执行。
       if (err) throw err;
-    })
+    });
 
     // 返回成功标识，如果全局？
     ctx.body = {
@@ -66,28 +66,60 @@ class ErrDbsController extends Controller {
     let opts = {
       // _id: "5eb7c6fc95040d060636ee51"
       name: 'ReferenceError'
-    }
+    };
 
     await ctx.model.ErrDbs.remove(opts, err => {
       if (err) throw err;
-    })
+    });
     ctx.body = {
       code: 0,
       message: '操作成功',
       data: {}
-    }
+    };
   }
   async getErr() {
     const { app, ctx } = this;
+    // 环境变量设置
     console.log(app.config.EGG_SERVER_ENV, 'app.config', app.config.env);
-    let res = await ctx.model.ErrDbs.find({});
+
+    let { errType } = ctx.request.body;
+    let query = [ { $match: {} } ];
+
+    switch (errType) {
+      // 如果是异常类型，则找出数据库中同类异常的占比，前5名
+      // 如果是异常日期，则找出相同日期里异常的占比，前5名
+      case 'errType':
+        query = [
+          // 只需找出所有数据库中，所有name不为空的项
+          {
+            $match: {
+              name: { $ne: null }
+            }
+          },
+          // 统计每种类型的数量
+          {
+            $group: {
+              // 必须用_id，表示主键
+              _id : '$name',
+              count: { $sum: 1 },
+              // 分组后如何，如何在分好组的数据里增加字段呢？
+              name: { $addToSet: '$name' },
+              // name: { $push: '$name' },
+            }
+          }
+        ];
+        break;
+    }
+    console.log('query', query.name);
+
+    let res = await ctx.model.ErrDbs.aggregate(query);
     await ctx.reqHandler.success(res);
   }
   async updateErr() {
     const { ctx } = this;
     let query = {
       _id: '5eb7c743c83b48065550ab6f'
-    }
+    };
     await ctx.model.ErrDbs.update(query, {
       cookies: '这是更新的cookies'
     });

@@ -16,11 +16,12 @@ export default {
       // 需要搜集没错错误类型的前多少名
       // 比如从文件名角度，从错误类型，
       const data = [
-        { item: '异常信息', count: 40, percent: 0.4 },
-        { item: '异常文件', count: 21, percent: 0.21 },
-        { item: '异常', count: 17, percent: 0.17 },
-        { item: '事例四', count: 13, percent: 0.13 },
-        { item: '事例五', count: 9, percent: 0.09 }
+        { item: '访问数', count: 40, percent: 0.4 },
+        { item: '访客数', count: 21, percent: 0.21 },
+        { item: '点击次数', count: 17, percent: 0.17 },
+        { item: '停留时长', count: 13, percent: 0.13 },
+        { item: '页面浏览数', count: 9, percent: 0.09 },
+        { item: '跳出率', count: 9, percent: 0.09 }
       ];
 
       const chart = new Chart({

@@ -5,7 +5,7 @@ module.exports = app => {
   // 增加异常监控
   app.get('/app/web/asset/js/*', app.controller.err.getSdk);
   app.post('/pushErr', app.controller.err.pushErr);
-  app.get('/getErr', app.controller.err.getErr);
+  app.post('/getErr', app.controller.err.getErr);
   app.get('/delErr', app.controller.err.delErr);
   app.get('/updateErr', app.controller.err.updateErr);
 

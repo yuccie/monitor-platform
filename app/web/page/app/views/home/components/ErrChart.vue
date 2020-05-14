@@ -8,20 +8,41 @@
 import { Chart, Util } from '@antv/g2';
 export default {
   name: 'PlatformChart',
+  props: {
+    errChartData: {
+      type: Array,
+      defalut: []
+    }
+  },
+  watch: {
+    errChartData(newData) {
+      console.log('newData', newData);
+      this.initChart(newData)
+    }
+  },
   data() {
     return {};
   },
   methods: {
-    initChart() {
+    initChart(chartData) {
       // 需要搜集没错错误类型的前多少名
       // 比如从文件名角度，从错误类型，
-      const data = [
-        { item: '异常信息', count: 40, percent: 0.4 },
-        { item: '异常文件', count: 21, percent: 0.21 },
-        { item: '异常', count: 17, percent: 0.17 },
-        { item: '事例四', count: 13, percent: 0.13 },
-        { item: '事例五', count: 9, percent: 0.09 }
+      let data = [
+        { item: '文件名1', count: 40, percent: 0.4 },
+        { item: '文件名2', count: 21, percent: 0.21 },
+        { item: '文件名3', count: 17, percent: 0.17 },
+        { item: '文件名4', count: 13, percent: 0.13 },
+        { item: '文件名5', count: 9, percent: 0.09 }
       ];
+
+      console.log('chartData', chartData);
+      // if (chartData.length) {
+      //   data = chartData.map(item => {
+      //     item.item = item.name[0];
+      //     item.percent = Number((item.count / 70).toFixed(2))
+      //     return item;
+      //   })
+      // }
 
       const chart = new Chart({
         // 用id的话，没法实例多个
@@ -88,7 +109,11 @@ export default {
     }
   },
   mounted() {
-    this.initChart();
+    console.log('this.errChartData', this.errChartData);
+    if (this.errChartData.length) {
+      this.initChart(this.errChartData);
+    }
+    
   }
 };
 </script>

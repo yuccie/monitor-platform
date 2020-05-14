@@ -4,7 +4,7 @@ import request from 'framework/utils/request';
 export function getArticleListPro(data) {
   return request({
     url: `/api/article/list`,
-    method: 'get', // 默认post
+    method: 'get',
     data,
   });
 }
@@ -13,8 +13,7 @@ export function getArticleListPro(data) {
 export function getErr(data) {
   return request({
     url: `/getErr`,
-    method: 'get', // 默认post
-    params: data,
+    data,
   });
 }
 
@@ -22,7 +21,7 @@ export function getErr(data) {
 export function delErr(data) {
   return request({
     url: `/delErr`,
-    method: 'get', // 默认post
+    method: 'get',
     params: data,
   });
 }
@@ -31,7 +30,7 @@ export function delErr(data) {
 export function updateErr(data) {
   return request({
     url: `/updateErr`,
-    method: 'get', // 默认post
+    method: 'get',
     params: data,
   });
 }

@@ -46,7 +46,8 @@ module.exports = {
   // 设置别名
   // resolve: {
   alias: {
-    'asset': 'app/web/asset' 
+    '@apis': 'app/web/framework/vue/apis/',
+    'asset': 'app/web/asset',
   },
   // },
   // deploy: {

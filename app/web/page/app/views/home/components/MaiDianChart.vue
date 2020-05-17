@@ -27,8 +27,8 @@ export default {
       const chart = new Chart({
         // 用id的话，没法实例多个
         container: this.$refs.chartDemo,
-        forceFit: true,
-        autoFit: true,
+        // forceFit: true,
+        // autoFit: true,
         // 需要添加宽高值
         width: 400,
         height: 600,

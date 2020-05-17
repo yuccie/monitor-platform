@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = app => {
-  console.log(1);
+
   const { STRING, INTEGER, DATE } = app.Sequelize;
 
   const ErrDb = app.sqlModel.define(

@@ -73,33 +73,48 @@ import {
 import ErrChart from './components/ErrChart';
 import PerfChart from './components/PerfChart';
 import MaiDianChart from './components/MaiDianChart';
+import PlatformChart from './components/PlatformChart';
 
 import { errTypes, perfTypes } from './data'
 
 export default {
-  components: { ErrChart, PerfChart, MaiDianChart },
+  components: { ErrChart, PerfChart, MaiDianChart, PlatformChart },
   data() {
     return {
       errTypes,
       perfTypes,
-      errType: '',
+      errType: 1,
       perfType: '',
       errChartData: []
     };
   },
   methods: {
-    async handleErrTypeChange(newErr) {
+    async handleErrTypeChange() {
       let reqData = {
-        errType: newErr
+        errType: this.errType
       }
       try {
         let res = await getErr(reqData);
-        this.errChartData = res.data;
+        if (res.data.list.length) {
+          this.errChartData = res.data.list.map(item => {
+            if (res.data.type === 2) {
+              item.item = new Date(Number(item.name[0])).toLocaleString();
+            } else {
+              item.item = item.name[0];
+            }
+            item.percent = Number((item.count / 70).toFixed(2))
+            return item;
+          })
+        }
         console.log('res', res);
       } catch(err) {
 
       }
     }
+  },
+  created() {
+    this.handleErrTypeChange();
+    console.log(aadd)
   }
 };
 </script>

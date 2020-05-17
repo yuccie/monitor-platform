@@ -16,44 +16,27 @@ export default {
   },
   watch: {
     errChartData(newData) {
-      console.log('newData', newData);
-      this.initChart(newData)
+      this.changeData(newData)
     }
   },
   data() {
     return {};
   },
   methods: {
-    initChart(chartData) {
+    initChart(data) {
       // 需要搜集没错错误类型的前多少名
       // 比如从文件名角度，从错误类型，
-      let data = [
-        { item: '文件名1', count: 40, percent: 0.4 },
-        { item: '文件名2', count: 21, percent: 0.21 },
-        { item: '文件名3', count: 17, percent: 0.17 },
-        { item: '文件名4', count: 13, percent: 0.13 },
-        { item: '文件名5', count: 9, percent: 0.09 }
-      ];
-
-      console.log('chartData', chartData);
-      // if (chartData.length) {
-      //   data = chartData.map(item => {
-      //     item.item = item.name[0];
-      //     item.percent = Number((item.count / 70).toFixed(2))
-      //     return item;
-      //   })
-      // }
-
       const chart = new Chart({
         // 用id的话，没法实例多个
         container: this.$refs.chartDemo,
-        forceFit: true,
-        autoFit: true,
+        // forceFit: true,
+        // autoFit: true,
         // 需要添加宽高值
         width: 400,
         height: 600,
         padding:[0,0,0,0]
       });
+      this.chart = chart;
 
       chart.data(data);
 
@@ -106,14 +89,15 @@ export default {
 
       // 默认选择
       interval.elements[0].setState('selected', true);
+    },
+    changeData(newData) {
+      this.chart && this.chart.changeData(newData);
     }
   },
   mounted() {
-    console.log('this.errChartData', this.errChartData);
     if (this.errChartData.length) {
       this.initChart(this.errChartData);
     }
-    
   }
 };
 </script>

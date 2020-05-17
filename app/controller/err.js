@@ -80,15 +80,17 @@ class ErrDbsController extends Controller {
   async getErr() {
     const { app, ctx } = this;
     // 环境变量设置
-    console.log(app.config.EGG_SERVER_ENV, 'app.config', app.config.env);
+    // console.log(app.config.EGG_SERVER_ENV, 'app.config', app.config.env);
+    // let { errTypes } = app.config.enums;
 
     let { errType } = ctx.request.body;
+
     let query = [ { $match: {} } ];
 
     switch (errType) {
       // 如果是异常类型，则找出数据库中同类异常的占比，前5名
       // 如果是异常日期，则找出相同日期里异常的占比，前5名
-      case 'errType':
+      case 1:
         query = [
           // 只需找出所有数据库中，所有name不为空的项
           {
@@ -106,13 +108,38 @@ class ErrDbsController extends Controller {
               name: { $addToSet: '$name' },
               // name: { $push: '$name' },
             }
+          },
+        ];
+        break;
+      case 2:
+        query = [
+          {
+            $match: {
+              timestamp: { $ne: null }
+            }
+          },
+          {
+            // 如何统计一个小时内的？
+            $group: {
+              _id : '$timestamp',
+              count: { $sum: 1 },
+              name: { $addToSet: '$timestamp' },
+            }
+          },
+          {
+            $limit: 5
           }
         ];
         break;
     }
     console.log('query', query.name);
 
-    let res = await ctx.model.ErrDbs.aggregate(query);
+    let dbRes = await ctx.model.ErrDbs.aggregate(query);
+    console.log('res', dbRes);
+    let res = {
+      type: errType,
+      list: dbRes
+    }
     await ctx.reqHandler.success(res);
   }
   async updateErr() {

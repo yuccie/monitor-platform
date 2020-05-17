@@ -3,11 +3,7 @@ module.exports = app => {
   const Schema = mongoose.Schema;
   const conn = app.mongooseDB.get('monitor');
 
-  // const ErrDbSchema = new Schema({
-  //   name: { type: String },
-  //   age: { type: Number },
-  //   date: { type: Date }
-  // });
+  const { Mixed } = Schema.Types;
 
   const ErrDbSchema = new Schema({
     name: String,
@@ -31,8 +27,9 @@ module.exports = app => {
     lineNumber: Number,
     columnNumber: Number,
     fileName: String,
-    // recentClickEventList: Mixed,
-    // recentAjaxList: Mixed,
+    recentClickEventList: Mixed,
+    recentAjaxList: Mixed,
+    timestamp: String,
     cookies: String,
     userAgent: String
   });

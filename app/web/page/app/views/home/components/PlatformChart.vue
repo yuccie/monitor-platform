@@ -1,11 +1,12 @@
 <template>
-<div class="chart">
-  <div ref="chartDemo"></div>
-</div>
+  <div class="chart">
+    <div ref="chartDemo"></div>
+  </div>
 </template>
 
 <script>
-import { Chart, Util } from '@antv/g2';
+      import DataSet from '@antv/data-set';
+      import { Chart } from '@antv/g2';
 export default {
   name: 'PlatformChart',
   data() {
@@ -13,78 +14,103 @@ export default {
   },
   methods: {
     initChart() {
-      // 需要搜集没错错误类型的前多少名
-      // 比如从文件名角度，从错误类型，
+
       const data = [
-        { item: '异常信息', count: 40, percent: 0.4 },
-        { item: '异常文件', count: 21, percent: 0.21 },
-        { item: '异常', count: 17, percent: 0.17 },
-        { item: '事例四', count: 13, percent: 0.13 },
-        { item: '事例五', count: 9, percent: 0.09 }
+        { year: '2002', value: 10 },
+        { year: '2003', value: 20 },
+        { year: '2004', value: 50 },
+        { year: '2005', value: 40 },
+        { year: '2006', value: 50 },
+        { year: '2007', value: 20 },
+        { year: '2008', value: 25 },
+        { year: '2009', value: 70 },
+        { year: '2010', value: 120 },
+        { year: '2011', value: 140 },
+        { year: '2012', value: 80 },
+        { year: '2013', value: 250 },
+        { year: '2014', value: 280 },
+        { year: '2015', value: 400 },
+        { year: '2016', value: 400 },
+        { year: '2017', value: 800 },
+        { year: '2018', value: 1000 }
       ];
+      const ds = new DataSet();
+      const dv = ds.createView().source(data);
+      dv.transform({
+        type: 'map',
+        callback: row => {
+          row.year = parseInt(row.year, 10);
+          return row;
+        }
+      }).transform({
+        type: 'regression',
+        method: 'polynomial',
+        fields: ['year', 'value'],
+        bandwidth: 0.1,
+        as: ['Year', 'Value']
+      });
 
       const chart = new Chart({
-        // 用id的话，没法实例多个
         container: this.$refs.chartDemo,
-        forceFit: true,
-        autoFit: true,
-        // 需要添加宽高值
-        width: 400,
-        height: 600,
-        padding:[0,0,0,0]
+        // autoFit: true,
+        // forceFit: true,
+        // 设置了autoFit或者forceFit，width会无效
+        // 如果实在想调用适配，可以调用 chart.forceFit()
+        width: 300,
+        height: 500,
+        padding: [20, 40]
       });
 
-      chart.data(data);
-
-      chart.coordinate('theta', {
-        radius: 0.85
-      });
-      chart.legend('item',{
-        title: null,
-        position: 'left-center',
-        // offsetX: 10,
-      }); 
-      chart.scale('percent', {
-        formatter: val => {
-          val = val * 100 + '%';
-          return val;
+      chart.scale({
+        Year: {
+          range: [0, 1]
+        },
+        value: {
+          alias: '市值 (亿美元)',
+          sync: true,
+          nice: true
+        },
+        Value: {
+          sync: true,
+          nice: true
         }
       });
-      chart.tooltip({
-        showTitle: false,
-        showMarkers: false
+      chart.axis('year', {
+        tickLine: null
       });
-      // chart.axis(false); // 关闭坐标轴
-      const interval = chart
-        .interval()
-        .adjust('stack')
-        .position('percent')
-        .color('item')
-        .label('percent', {
-          offset: -40,
-          style: {
-            textAlign: 'center',
-            shadowBlur: 2,
-            shadowColor: 'rgba(0, 0, 0, .45)',
-            fill: '#fff'
-          }
-        })
-        .tooltip('item*percent', (item, percent) => {
-          percent = percent * 100 + '%';
-          return {
-            name: item,
-            value: percent
-          };
-        })
-        .style({
-          lineWidth: 1,
-          stroke: '#fff'
-        });
-      chart.interaction('element-single-selected');
-      chart.render();
 
-      // 默认选择
-      interval.elements[0].setState('selected', true);
+      const view1 = chart.createView();
+      view1.data(data);
+      view1
+        .interval()
+        .position('year*value')
+        .style({
+          fillOpacity: 1
+        });
+
+      const view2 = chart.createView();
+      view2.axis(false);
+      view2.data(dv.rows);
+      view2
+        .line()
+        .position('Year*Value')
+        .style({
+          stroke: '#969696',
+          lineDash: [3, 3]
+        })
+        .tooltip(false);
+      view2.annotation().text({
+        content: '趋势线',
+        position: ['min', 'min'],
+        style: {
+          fill: '#8c8c8c',
+          fontSize: 14,
+          fontWeight: 300
+        },
+        offsetY: -140
+      });
+
+      chart.render();
     }
   },
   mounted() {

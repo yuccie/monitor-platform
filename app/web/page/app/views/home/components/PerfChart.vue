@@ -25,12 +25,12 @@ export default {
       const chart = new Chart({
         // 用id的话，没法实例多个
         container: this.$refs.chartDemo,
-        forceFit: true,
-        autoFit: true,
+        // forceFit: true,
+        // autoFit: true,
         // 需要添加宽高值
-        width: 400,
+        width: 401,
         height: 600,
-        padding:[0,0,0,0]
+        // padding:[0,0,0,0]
       });
 
       chart.data(data);
@@ -84,10 +84,20 @@ export default {
 
       // 默认选择
       interval.elements[0].setState('selected', true);
+
+          const e = document.createEvent('Event')
+    e.initEvent('resize', true, true)
+    window.dispatchEvent(e)
     }
   },
   mounted() {
     this.initChart();
+  },
+  created() {
+    console.log(11);
+              const e = document.createEvent('Event')
+    e.initEvent('resize', true, true)
+    window.dispatchEvent(e)
   }
 };
 </script>

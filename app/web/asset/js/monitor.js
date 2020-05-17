@@ -165,6 +165,7 @@ fn._parse = function (error) {
     responseStatusCode: error.responseStatusCode,
     responseStatusText: error.responseStatusText,
     response: error.response,
+    timestamp: Date.now(),
     stack: stack,
     lineNumber: error.lineNumber || error.line || (stack && stack[0].lineNumber),
     columnNumber: error.columnNumber || error.column || (stack && stack[0].columnNumber),

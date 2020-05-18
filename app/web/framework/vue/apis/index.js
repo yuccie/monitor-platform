@@ -48,8 +48,7 @@ export function getPerf(data) {
 export function getSqlErr(data) {
   return request({
     url: `/getSqlErr`,
-    method: 'get',
-    params: data,
+    data,
   });
 }
 

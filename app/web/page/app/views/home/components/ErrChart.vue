@@ -15,9 +15,19 @@ export default {
     }
   },
   watch: {
-    errChartData(newData) {
-      this.changeData(newData)
+    errChartData: {
+      handler(newData) {
+        this.$nextTick(() => {
+          this.changeData(newData)
+        })
+      },
+      deep: true,
     }
+    // errChartData(newData) {
+    //   // this.$nextTick(() => {
+        
+    //   // })
+    // }
   },
   data() {
     return {};
@@ -95,9 +105,12 @@ export default {
     }
   },
   mounted() {
-    if (this.errChartData.length) {
-      this.initChart(this.errChartData);
-    }
+    // 如果刚开始数据为空时，会导致chart实例并没有创建，然后数据更新时会不显示图表
+    // if (this.errChartData.length) {
+      this.$nextTick(() => {
+        this.initChart(this.errChartData);
+      })
+    // }
   }
 };
 </script>

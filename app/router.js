@@ -13,9 +13,9 @@ module.exports = app => {
   app.get('/getPerf', app.controller.perf.index);
 
   // 操作mysql数据库的方法
-  app.get('/getSqlErr', app.controller.err.getSqlErr);
+  app.post('/getSqlErr', app.controller.err.getSqlErr);
   app.get('/delSqlErr', app.controller.err.delSqlErr);
-  app.get('/updateSqlErr', app.controller.err.updateSqlErr);
+  app.post('/updateSqlErr', app.controller.err.updateSqlErr);
 
   // 操作redis里的方法
   app.get('/getRedisErr', app.controller.err.getRedisErr);

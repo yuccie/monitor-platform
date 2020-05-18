@@ -20,6 +20,7 @@ class ErrDbsController extends Controller {
     let errInfo = ctx.request.body;
     errInfo.userAgent = ctx.request.header['user-agent'];
 
+
     await ctx.model.ErrDbs.create(errInfo);
     // let res = await ctx.model.ErrDbs.find({});
     // console.log(res, 'res');
@@ -35,9 +36,6 @@ class ErrDbsController extends Controller {
     // errMonitor.save();
     // let res = await ctx.model.ErrDbs.find({});
     // console.log('res', res);
-
-    // console.log('process.cwd()', process.cwd());
-    // /Users/mac/missfresh/workSpace/engineer/egg/monitor-platform
 
     // 获取post请求入参：https://eggjs.org/zh-cn/basics/controller.html
     // 将入参格式化，并写入到本地文件
@@ -135,7 +133,7 @@ class ErrDbsController extends Controller {
     console.log('query', query.name);
 
     let dbRes = await ctx.model.ErrDbs.aggregate(query);
-    console.log('res', dbRes);
+
     let res = {
       type: errType,
       list: dbRes
@@ -160,9 +158,16 @@ class ErrDbsController extends Controller {
 
   // 操作mysql里的数据
   async getSqlErr() {
-    const { ctx } = this;
+    const { ctx, app } = this;
+    let { errType } = ctx.request.body;
+    console.log('errType', errType, Object.keys(app.Sequelize));
+    // fn是聚合，Op是运算对象，里面还有Op.or，Op.eq等等，
+    const { fn, Op, col } = app.Sequelize;
+    let query = {
+      group: 'name'
+    }
 
-    let res = await ctx.sqlModel.ErrDbs.findAll({});
+    let res = await ctx.sqlModel.models.err_dbs.findAll(query);
     await ctx.reqHandler.success(res);
   }
   async delSqlErr() {
@@ -173,10 +178,17 @@ class ErrDbsController extends Controller {
     await ctx.reqHandler.success(res);
   }
   async updateSqlErr() {
-    const { ctx } = this;
+    const { ctx, app } = this;
 
-    let res = await ctx.sqlModel.ErrDbs.findAll({});
-    await ctx.reqHandler.success(res);
+    let errInfo = ctx.request.body;
+    errInfo.userAgent = ctx.request.header['user-agent'];
+
+    // res其实是err_dbs的一个实例，
+    // 意味着，可以通过res直接操作数据库里的字段，但需要save才能生效
+    await ctx.sqlModel.models.err_dbs.create(errInfo);
+    // ctx.body = ''; // 如果 设为null则是204码。
+    // 如果不处理响应，接口则报404
+    await ctx.reqHandler.success({});
   }
 
   // 操作redis里的数据

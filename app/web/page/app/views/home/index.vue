@@ -68,7 +68,7 @@
 
 <script>
 import {
-  getErr
+  getErr, getSqlErr
 } from '@apis/';
 import ErrChart from './components/ErrChart';
 import PerfChart from './components/PerfChart';
@@ -94,8 +94,10 @@ export default {
         errType: this.errType
       }
       try {
-        let res = await getErr(reqData);
+        // let res = await getErr(reqData);
+        let res = await getSqlErr(reqData);
         if (res.data.list.length) {
+          // debugger
           this.errChartData = res.data.list.map(item => {
             if (res.data.type === 2) {
               item.item = new Date(Number(item.name[0])).toLocaleString();
@@ -106,7 +108,7 @@ export default {
             return item;
           })
         }
-        console.log('res', res);
+        console.log('res 请求了', res);
       } catch(err) {
 
       }

@@ -9,14 +9,16 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-    console.log('在数据里新建了err_dbs表');
+
     const { INTEGER, DATE, STRING } = Sequelize;
-    return queryInterface.createTable('err_dbs', {
-      id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+    const tableName = 'err_dbs';
+
+    return queryInterface.createTable(tableName, {
+      id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       name: STRING(30),
       age: INTEGER,
-      created_at: DATE,
-      updated_at: DATE
+      created_at: STRING,
+      // desc: STRING
     });
   },
 

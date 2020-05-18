@@ -1,91 +1,91 @@
 {
-  "name": "ReferenceError",
+  "name": "TypeError",
   "title": "Egg + Vue + Webpack Client Side Render(CSR)",
-  "projectName": "127.0.0.1",
-  "host": "127.0.0.1",
-  "message": "aadd is not defined",
-  "content": "aadd is not defined",
+  "projectName": "172.16.185.224",
+  "host": "172.16.185.224",
+  "message": "Cannot read property 'get' of undefined",
+  "content": "Cannot read property 'get' of undefined",
   "errorType": "js",
-  "url": "http://127.0.0.1:7001/",
+  "url": "http://172.16.185.224:7001/",
   "errorLevel": 1,
-  "timestamp": 1589728428660,
+  "timestamp": 1589786783400,
   "stack": [
     {
-      "columnNumber": 17,
-      "lineNumber": 89,
-      "fileName": "webpack:///./app/web/page/app/views/home/index.vue?./node_modules/_thread-loader@2.1.3@thread-loader/dist/cjs.js??ref--0-0!./node_modules/_babel-loader@8.1.0@babel-loader/lib??ref--0-1!./node_modules/_vue-loader@15.9.2@vue-loader/lib??vue-loader-options",
-      "functionName": "VueComponent.created",
-      "source": "    at VueComponent.created (webpack:///./app/web/page/app/views/home/index.vue?./node_modules/_thread-loader@2.1.3@thread-loader/dist/cjs.js??ref--0-0!./node_modules/_babel-loader@8.1.0@babel-loader/lib??ref--0-1!./node_modules/_vue-loader@15.9.2@vue-loader/lib??vue-loader-options:89:17)"
+      "columnNumber": 32,
+      "lineNumber": 104,
+      "fileName": "webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/geometry/label/layout/distribute.js?",
+      "functionName": "distribute",
+      "source": "    at distribute (webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/geometry/label/layout/distribute.js?:104:32)"
     },
     {
-      "columnNumber": 57,
-      "lineNumber": 1859,
-      "fileName": "webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?",
-      "functionName": "invokeWithErrorHandling",
-      "source": "    at invokeWithErrorHandling (webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?:1859:57)"
+      "columnNumber": 21,
+      "lineNumber": 181,
+      "fileName": "webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/component/labels.js?",
+      "functionName": "eval",
+      "source": "    at eval (webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/component/labels.js?:181:21)"
     },
     {
-      "columnNumber": 7,
-      "lineNumber": 4216,
-      "fileName": "webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?",
-      "functionName": "callHook",
-      "source": "    at callHook (webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?:4216:7)"
+      "columnNumber": 19,
+      "lineNumber": 13,
+      "fileName": "webpack:///./node_modules/_@antv_util@2.0.8@@antv/util/esm/each.js?",
+      "functionName": "each",
+      "source": "    at each (webpack:///./node_modules/_@antv_util@2.0.8@@antv/util/esm/each.js?:13:19)"
     },
     {
-      "columnNumber": 5,
-      "lineNumber": 4998,
-      "fileName": "webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?",
-      "functionName": "VueComponent.Vue._init",
-      "source": "    at VueComponent.Vue._init (webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?:4998:5)"
+      "columnNumber": 68,
+      "lineNumber": 172,
+      "fileName": "webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/component/labels.js?",
+      "functionName": "Labels.doLayout",
+      "source": "    at Labels.doLayout (webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/component/labels.js?:172:68)"
     },
     {
-      "columnNumber": 12,
-      "lineNumber": 5143,
-      "fileName": "webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?",
-      "functionName": "new VueComponent",
-      "source": "    at new VueComponent (webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?:5143:12)"
+      "columnNumber": 14,
+      "lineNumber": 43,
+      "fileName": "webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/component/labels.js?",
+      "functionName": "Labels.render",
+      "source": "    at Labels.render (webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/component/labels.js?:43:14)"
     },
     {
-      "columnNumber": 10,
-      "lineNumber": 3286,
-      "fileName": "webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?",
-      "functionName": "createComponentInstanceForVnode",
-      "source": "    at createComponentInstanceForVnode (webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?:3286:10)"
+      "columnNumber": 24,
+      "lineNumber": 65,
+      "fileName": "webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/geometry/label/base.js?",
+      "functionName": "PieLabel.GeometryLabel.render",
+      "source": "    at PieLabel.GeometryLabel.render (webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/geometry/label/base.js?:65:24)"
     },
     {
-      "columnNumber": 45,
-      "lineNumber": 3117,
-      "fileName": "webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?",
-      "functionName": "init",
-      "source": "    at init (webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?:3117:45)"
+      "columnNumber": 23,
+      "lineNumber": 1322,
+      "fileName": "webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/geometry/base.js?",
+      "functionName": "Interval.Geometry.renderLabels",
+      "source": "    at Interval.Geometry.renderLabels (webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/geometry/base.js?:1322:23)"
     },
     {
-      "columnNumber": 5,
-      "lineNumber": 3304,
-      "fileName": "webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?",
-      "functionName": "merged",
-      "source": "    at merged (webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?:3304:5)"
+      "columnNumber": 18,
+      "lineNumber": 385,
+      "fileName": "webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/geometry/base.js?",
+      "functionName": "Interval.Geometry.paint",
+      "source": "    at Interval.Geometry.paint (webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/geometry/base.js?:385:18)"
     },
     {
-      "columnNumber": 9,
-      "lineNumber": 5969,
-      "fileName": "webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?",
-      "functionName": "createComponent",
-      "source": "    at createComponent (webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?:5969:9)"
+      "columnNumber": 22,
+      "lineNumber": 1370,
+      "fileName": "webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/chart/view.js?",
+      "functionName": "Chart.View.paintGeometries",
+      "source": "    at Chart.View.paintGeometries (webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/chart/view.js?:1370:22)"
     },
     {
-      "columnNumber": 9,
-      "lineNumber": 5916,
-      "fileName": "webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?",
-      "functionName": "createElm",
-      "source": "    at createElm (webpack:///./node_modules/_vue@2.6.11@vue/dist/vue.common.dev.js?:5916:9)"
+      "columnNumber": 14,
+      "lineNumber": 972,
+      "fileName": "webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/chart/view.js?",
+      "functionName": "Chart.View.renderPaintRecursive",
+      "source": "    at Chart.View.renderPaintRecursive (webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/chart/view.js?:972:14)"
     }
   ],
-  "lineNumber": 89,
-  "columnNumber": 17,
-  "fileName": "webpack:///./app/web/page/app/views/home/index.vue?./node_modules/_thread-loader@2.1.3@thread-loader/dist/cjs.js??ref--0-0!./node_modules/_babel-loader@8.1.0@babel-loader/lib??ref--0-1!./node_modules/_vue-loader@15.9.2@vue-loader/lib??vue-loader-options",
+  "lineNumber": 104,
+  "columnNumber": 32,
+  "fileName": "webpack:///./node_modules/_@antv_g2@4.0.7@@antv/g2/esm/geometry/label/layout/distribute.js?",
   "recentClickEventList": null,
   "recentAjaxList": null,
   "cookies": null,
-  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36"
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36"
 }

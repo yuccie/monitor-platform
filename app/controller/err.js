@@ -160,11 +160,33 @@ class ErrDbsController extends Controller {
   async getSqlErr() {
     const { ctx, app } = this;
     let { errType } = ctx.request.body;
-    console.log('errType', errType, Object.keys(app.Sequelize));
+
     // fn是聚合，Op是运算对象，里面还有Op.or，Op.eq等等，
     const { fn, Op, col } = app.Sequelize;
-    let query = {
-      group: 'name'
+    let query = {};
+
+    switch(errType) {
+      case 1:
+        query = {
+          attributes: [
+            // 将name 改为item输出
+            ['name', 'item'],
+            [fn('count', col('name')), 'count'],
+          ],
+          group: 'name'
+        }
+        break;
+      case 2:
+        query = {
+          attributes: [
+            ['content', 'item'],
+            [fn('count', col('content')), 'count'],
+          ],
+          group: 'content'
+        }
+        break;
+      default: 
+       query = {}
     }
 
     let res = await ctx.sqlModel.models.err_dbs.findAll(query);

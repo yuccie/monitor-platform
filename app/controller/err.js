@@ -166,6 +166,7 @@ class ErrDbsController extends Controller {
     let query = {};
 
     switch(errType) {
+      // 异常类型
       case 1:
         query = {
           attributes: [
@@ -179,17 +180,61 @@ class ErrDbsController extends Controller {
       case 2:
         query = {
           attributes: [
+            ['created_at', 'item'],
+            [fn('count', col('created_at')), 'count'],
+          ],
+          group: 'created_at'
+        }
+        break;
+      case 3:
+        query = {
+          attributes: [
             ['content', 'item'],
             [fn('count', col('content')), 'count'],
           ],
           group: 'content'
         }
         break;
+      // 异常浏览器，但需要解析浏览器字符串
+      case 4:
+        query = {
+          attributes: [
+            ['user_agent', 'item'],
+            [fn('count', col('user_agent')), 'count'],
+          ],
+          group: 'user_agent'
+        }
+        break;
       default: 
        query = {}
     }
 
-    let res = await ctx.sqlModel.models.err_dbs.findAll(query);
+    let list = await ctx.sqlModel.models.err_dbs.findAll(query);
+
+    let totalQuery = {
+      attributes: [
+        [fn('count', '*'), 'total']
+      ]
+    }
+    // 返回的是模型实例，可以直接调用几个数组方法，但。。。需注意，无法直接调用
+    let totalDbs = await ctx.sqlModel.models.err_dbs.findAll(totalQuery);
+    let total = JSON.parse(JSON.stringify(totalDbs))[0].total;
+    // console.log(JSON.parse(JSON.stringify(totalDbs))[0].total);
+    // let total;
+    // totalDbs.forEach(item => {
+    //   total = item.toJSON().total
+    // })
+
+    // 直接操作实例，没有意义
+    // let newList = list.map(item => {
+    //   item.percent = (item.count / total).toFixed(2);
+    //   return item;
+    // })
+
+    let res = {
+      list,
+      total,
+    }
     await ctx.reqHandler.success(res);
   }
   async delSqlErr() {

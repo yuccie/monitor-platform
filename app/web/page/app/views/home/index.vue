@@ -97,14 +97,8 @@ export default {
         // let res = await getErr(reqData);
         let res = await getSqlErr(reqData);
         if (res.data.list.length) {
-          // debugger
           this.errChartData = res.data.list.map(item => {
-            if (res.data.type === 2) {
-              item.item = new Date(Number(item.name[0])).toLocaleString();
-            } else {
-              item.item = item.name[0];
-            }
-            item.percent = Number((item.count / 70).toFixed(2))
+            item.percent = Number((item.count / res.data.total).toFixed(2))
             return item;
           })
         }

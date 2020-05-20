@@ -210,6 +210,7 @@ class ErrDbsController extends Controller {
         break;
       default: 
        query = {
+         order: [['timestamp', 'desc']],
          limit: 10
        }
     }

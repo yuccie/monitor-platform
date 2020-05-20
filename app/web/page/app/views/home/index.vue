@@ -86,6 +86,8 @@
 
 <script>
 import { getErr, getSqlErr } from '@apis/';
+import UaParser from 'ua-parser-js';
+import dayjs from 'dayjs';
 import LayoutHeader from '@layoutApp/header/header';
 import ErrChart from './components/ErrChart';
 import PerfChart from './components/PerfChart';
@@ -118,6 +120,13 @@ export default {
         let res = await getSqlErr(reqData);
         if (res.data.list.length) {
           this.errChartData = res.data.list.map(item => {
+            if (this.errType === 2) {
+              // new Date(Number(item.timestamp)).toLocaleString();
+              // item.item = dayjs(item.item).format('YYYY/MM/DD HH:mm:ss');
+              let date = new Date(item.item).toLocaleDateString()
+              let time = new Date(item.item).toLocaleTimeString()
+              item.item = `${date} ${time}`; // new Date(Number(item.timestamp)).toLocaleString();
+            }
             item.percent = Number((item.count / res.data.total).toFixed(2));
             return item;
           });

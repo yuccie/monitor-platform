@@ -10,12 +10,12 @@
         <el-table-column align="center" type="index" label="#"></el-table-column>
         <el-table-column align="center" prop="name" label="NAME"></el-table-column>
         <el-table-column align="center" prop="content" label="MESSAGE" width="300"></el-table-column>
-        <el-table-column align="center" prop="url" label="URL" width="250"></el-table-column>
-        <el-table-column align="center" prop="errorType" label="TYPE"></el-table-column>
+        <el-table-column align="center" prop="url" label="URL" width="200"></el-table-column>
+        <el-table-column align="center" prop="errorType" label="TYPE" width="100"></el-table-column>
         <el-table-column align="center" prop="browser" label="BROWSER"></el-table-column>
         <el-table-column align="center" prop="os" label="OS"></el-table-column>
         <el-table-column align="center" prop="host" label="IP"></el-table-column>
-        <el-table-column align="center" prop="createdAt" label="TIME"></el-table-column>
+        <el-table-column align="center" prop="createdAt" label="TIME" width="115"></el-table-column>
 
         <el-table-column align="center" fixed="right" label="操作" width="100">
           <template slot-scope="scope">
@@ -87,7 +87,8 @@ export default {
               item.os = UA.os.name;
               item.engine = UA.engine.name;
             }
-            item.createdAt = dayjs(item.createdAt).format('YYYY/MM/DD HH:mm:ss')
+
+            item.createdAt = new Date(Number(item.timestamp)).toLocaleString();
             return item;
           });
         }

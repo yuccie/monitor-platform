@@ -172,7 +172,7 @@ fn._parse = function (error) {
     fileName: error.fileName || (stack && stack[0].fileName),
     recentClickEventList: error.recentClickEventList || null,
     recentAjaxList: error.recentAjaxList || null,
-    cookies: document.cookie || null,
+    // cookies: document.cookie || null,
   }
   return obj;
 

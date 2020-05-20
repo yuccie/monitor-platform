@@ -45,11 +45,11 @@
             <div class="item flex">
               <span>Stack:</span>
               <div v-if="originalStack.length" class="stack-container">
-                <div v-for="(item, index) in originalStack" class="stack-item">
+                <div v-for="(item, index) in originalStack" :key="index" class="stack-item">
                   <h3>at {{item.source}}:{{item.line}}:{{item.column}}</h3>
                   <pre v-highlightjs><code class="javascript">{{item.code}}</code></pre>
                   <div class="line-number">
-                    <div v-for="number in item.lineNumbers" :class="{hight: number == item.line}">
+                    <div v-for="number in item.lineNumbers" :key="number"  :class="{hight: number == item.line}">
                       <i class="el-icon-caret-right" v-if="number == item.line"></i>
                       {{number}}
                     </div>
@@ -77,7 +77,7 @@
             <div class="item flex">
               <span>Stack:</span>
               <div class="stack-container">
-                <div v-for="(item, index) in errorDetail.stack" class="stack-item">
+                <div v-for="(item, index) in errorDetail.stack" :key="index" class="stack-item">
                   <h3>{{item.source}}</h3>
                   <pre
                     v-if="index == 0 && fileErrorCode"
@@ -120,7 +120,7 @@
           <div slot="header">
             <strong>cookie信息</strong>
           </div>
-          <div class="item" v-for="item in (errorDetail.cookies).split(';')">
+          <div class="item" :key="item" v-for="item in (errorDetail.cookies).split(';')">
             <span>{{item.split('=')[0]}}</span>
             <span>{{decodeURIComponent(item.split('=')[1])}}</span>
           </div>

@@ -11,10 +11,7 @@ module.exports = async app => {
     {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       name: STRING(30),
-      age: INTEGER,
       created_at: STRING,
-      desc: STRING,
-      name: STRING,
       title: STRING,
       projectName: STRING,
       host: STRING,
@@ -48,12 +45,12 @@ module.exports = async app => {
       // recentClickEventList: Mixed,
       // recentAjaxList: Mixed,
       timestamp: STRING,
-      cookies: STRING,
+      // cookies: STRING,
       userAgent: STRING,
-      test: {
-        type: STRING,
-        defaultValue: "test的默认值"
-      }
+      // test: {
+      //   type: STRING,
+      //   defaultValue: "test的默认值"
+      // }
     },
     // 默认情况下，Sequelize 会执行自动复数化，也就是将模型名改成复数形式
     // 然后作为表名，但为了统一起来，统一禁止自动复数，这里的tableName其实就是模型名

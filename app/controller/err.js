@@ -162,7 +162,7 @@ class ErrDbsController extends Controller {
     let { errType } = ctx.request.body;
 
     // fn是聚合，Op是运算对象，里面还有Op.or，Op.eq等等，
-    const { fn, Op, col } = app.Sequelize;
+    const { fn, Op, col, DATE } = app.Sequelize;
     let query = {};
 
     switch(errType) {
@@ -183,7 +183,10 @@ class ErrDbsController extends Controller {
             ['created_at', 'item'],
             [fn('count', col('created_at')), 'count'],
           ],
-          group: 'created_at'
+          // 理想情况下，按日期排序，但是怎么去掉时间呢？
+          group: 'created_at',
+          order: [['created_at', 'desc']],
+          limit: 5
         }
         break;
       case 3:
@@ -206,7 +209,9 @@ class ErrDbsController extends Controller {
         }
         break;
       default: 
-       query = {}
+       query = {
+         limit: 10
+       }
     }
 
     let list = await ctx.sqlModel.models.err_dbs.findAll(query);

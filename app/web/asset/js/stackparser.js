@@ -1,7 +1,3 @@
-/**
- * Created by hanan on 17/11/15.
- */
-
 var StackFrame = require('./stackframe');
 
 module.exports = function ErrorStackParser(StackFrame) {

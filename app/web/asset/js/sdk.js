@@ -1,6 +1,3 @@
-/**
- * Created by hanan on 17/11/14.
- */
 var win = window;
 var Monitor = require('./monitor');
 var monitor = new Monitor();

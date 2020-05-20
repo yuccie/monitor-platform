@@ -1,7 +1,3 @@
-/**
- * Created by hanan on 17/11/15.
- */
-
 module.exports = function () {
   'use strict';
 

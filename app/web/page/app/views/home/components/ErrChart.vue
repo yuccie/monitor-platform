@@ -60,7 +60,7 @@ export default {
       }); 
       chart.scale('percent', {
         formatter: val => {
-          val = val * 100 + '%';
+          val = (val * 100).toFixed(0) + '%';
           return val;
         }
       });
@@ -84,7 +84,7 @@ export default {
           }
         })
         .tooltip('item*percent', (item, percent) => {
-          percent = percent * 100 + '%';
+          percent = (percent * 100).toFixed(0) + '%';
           return {
             name: item,
             value: percent

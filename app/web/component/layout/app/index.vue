@@ -13,6 +13,7 @@
     <body>
       <div id="app">
         <MainLayout>
+          <slot></slot>
           <div slot="main">
             <slot></slot>
           </div>
@@ -23,6 +24,7 @@
 
   <div v-else-if="!isNode" id="app">
     <MainLayout>
+      <slot></slot>
       <div slot="main">
         <slot></slot>
       </div>

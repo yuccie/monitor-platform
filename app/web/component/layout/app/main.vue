@@ -1,6 +1,6 @@
 <template>
    <div>
-     <LayoutHeader></LayoutHeader>
+     <!-- <LayoutHeader></LayoutHeader> -->
      <LayoutContent>
        <div slot="content"><slot name="main"></slot></div>
      </LayoutContent>
@@ -9,11 +9,11 @@
 <style>
 </style>
 <script type="text/babel">
-  import LayoutHeader from './header/header';
+  // import LayoutHeader from './header/header';
   import LayoutContent from './content/content';
   export default{
     components: {
-      LayoutHeader,
+      // LayoutHeader,
       LayoutContent
     }
   }

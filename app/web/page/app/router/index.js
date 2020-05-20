@@ -18,6 +18,18 @@ export default function createRouter() {
         component: () => import('../views/home/'),
       },
       {
+        path: '/errList',
+        name: 'ErrList',
+        component: () => import('../views/home/errList/'),
+      },
+      {
+        path: '/errDetail',
+        name: 'ErrDetail',
+        component: () => import('../views/home/errList/detail'),
+      },
+
+
+      {
         path: '/list',
         component: ListView
       },

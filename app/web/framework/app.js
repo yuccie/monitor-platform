@@ -4,8 +4,9 @@ import './vue/filter';
 import './vue/directive';
 
 import 'element-ui/lib/theme-chalk/index.css';
-import ElementUI from 'element-ui';
+import ElementUI, { Message } from 'element-ui';
 Vue.use(ElementUI);
+Vue.prototype.$message = Message;
 
 
 import '../asset/js/sdk';

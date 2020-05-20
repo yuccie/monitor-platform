@@ -2,38 +2,12 @@
   <header class="header">
     <div class="header-box">
       <h1 class="logo">
-        <a href class="router-link-active">monitor platform</a>
+        <a href="/" class="router-link-active">monitor platform</a>
       </h1>
 
       <div class="actions">
-        <el-row :gutter="12">
-          <el-col :span="8">
-            <el-autocomplete
-              size="small"
-              class="inline-input"
-              v-model="state1"
-              :fetch-suggestions="querySearch"
-              placeholder="请选择时间"
-              @select="handleSelect"
-            ></el-autocomplete>
-          </el-col>
-
-          <el-col :span="8">
-            <el-autocomplete
-              size="small"
-              class="inline-input"
-              v-model="state1"
-              :fetch-suggestions="querySearch"
-              placeholder="请输入项目"
-              @select="handleSelect"
-            ></el-autocomplete>
-          </el-col>
-
-          <el-col :span="8">
-            <span>杜吉冲</span>
-            <!-- <el-avatar :size="32" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar> -->
-          </el-col>
-        </el-row>
+        <slot></slot>
+        <span>杜吉冲</span>
       </div>
     </div>
   </header>
@@ -134,10 +108,9 @@ export default {
     // background: blueviolet;
   }
   .actions {
-    .el-row {
-      display: flex;
-      align-items: center;
-    }
+    display: flex;
+    align-items: center;
+    // justify-content: space-around;
     // background: burlywood;
   }
 }

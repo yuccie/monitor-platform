@@ -97,3 +97,11 @@ export function setRedisErr(data) {
   });
 }
 
+// 获取异常监控里的错误趋势图
+export function getErrTrand(data) {
+  return request({
+    url: `/getErrTrand`,
+    data,
+  });
+}
+

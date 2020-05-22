@@ -81,13 +81,8 @@ export default {
         });
       chart.interaction('element-single-selected');
       chart.render();
-
       // 默认选择
       interval.elements[0].setState('selected', true);
-
-          const e = document.createEvent('Event')
-    e.initEvent('resize', true, true)
-    window.dispatchEvent(e)
     }
   },
   mounted() {

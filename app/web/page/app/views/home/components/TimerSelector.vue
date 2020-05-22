@@ -1,13 +1,21 @@
 <template>
-  <el-select class="time-select" size="small" v-model="value" placeholder="请选择">
+  <el-select class="time-select" size="small" v-model="cTimeRange" placeholder="请选择" @change="change">
     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
   </el-select>
 </template>
 
 <script>
 export default {
+  props: {
+    timeRange: {
+      type: Number,
+      default: 7
+    }
+  },
   data() {
     return {
+      // 避免v-model直接绑定props
+      cTimeRange: this.timeRange,
       options: [
         // {
         //   value: '选项1',
@@ -18,20 +26,24 @@ export default {
         //   label: '昨天'
         // },
         {
-          value: '选项2',
+          value: 7,
           label: '最近7天'
         },
         {
-          value: '选项3',
+          value: 14,
           label: '最近14天'
         },
         {
-          value: '选项4',
+          value: 30,
           label: '最近30天'
         },
       ],
-      value: ''
     };
+  },
+  methods: {
+    change(newRange) {
+      this.$emit('update:timeRange', newRange);
+    }
   }
 };
 </script>

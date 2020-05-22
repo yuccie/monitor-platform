@@ -16,6 +16,7 @@ module.exports = app => {
   app.post('/getSqlErr', app.controller.err.getSqlErr);
   app.get('/delSqlErr', app.controller.err.delSqlErr);
   app.post('/updateSqlErr', app.controller.err.updateSqlErr);
+  app.post('/getErrTrand', app.controller.err.getErrTrand); // 获取异常监控里的错误趋势图
 
   // 操作redis里的方法
   app.get('/getRedisErr', app.controller.err.getRedisErr);

@@ -222,7 +222,7 @@ fn._request = function (error) {
   xhr.responseType = 'json';
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4) {
-      if (xhr.status === 200 && xhr.response.code === 0) {
+      if (xhr.status === 200) {
         self.emit('pushSuccess', [error]);
       } else {
         self.emit('pushFailed', [error]);

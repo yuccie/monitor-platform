@@ -23,11 +23,6 @@ export default {
       },
       deep: true,
     }
-    // errChartData(newData) {
-    //   // this.$nextTick(() => {
-        
-    //   // })
-    // }
   },
   data() {
     return {};
@@ -56,6 +51,11 @@ export default {
       chart.legend('item',{
         title: null,
         position: 'left-center',
+        // marker: 'square',
+        // itemFormatter(val) {
+        //   console.log('val', val)
+        //   return val;
+        // }
         // offsetX: 10,
       }); 
       chart.scale('percent', {
@@ -96,12 +96,21 @@ export default {
         });
       chart.interaction('element-single-selected');
       chart.render();
+      this.chart.interval = interval;
 
-      // 默认选择
-      interval.elements[0].setState('selected', true);
+      // 默认选择，初次渲染elements可能为空
+      if (interval.elements.length) {
+        interval.elements[0].setState('selected', true);
+      }
     },
     changeData(newData) {
-      this.chart && this.chart.changeData(newData);
+      // this.chart && this.chart.changeData(newData);
+      if (this.chart) {
+        this.chart.data(newData);
+        this.chart.render()
+        // 更新数据时，默认选中一个
+        this.chart.interval.elements[0].setState('selected', true);
+      }
     }
   },
   mounted() {

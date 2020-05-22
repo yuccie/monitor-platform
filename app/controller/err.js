@@ -162,7 +162,7 @@ class ErrDbsController extends Controller {
     let { errType } = ctx.request.body;
 
     // fn是聚合，Op是运算对象，里面还有Op.or，Op.eq等等，
-    const { fn, Op, col, DATE } = app.Sequelize;
+    const { fn, col } = app.Sequelize;
     let query = {};
 
     switch(errType) {
@@ -180,13 +180,12 @@ class ErrDbsController extends Controller {
       case 2:
         query = {
           attributes: [
-            ['created_at', 'item'],
-            [fn('count', col('created_at')), 'count'],
+            [fn('DATE', col('created_at')), 'item'],
+            [fn('count', '*'), 'count'],
           ],
-          // 理想情况下，按日期排序，但是怎么去掉时间呢？
-          group: 'created_at',
-          order: [['created_at', 'desc']],
-          limit: 5
+          group: [fn('DATE', col('created_at')), 'item'],
+          order: [[fn('count', '*'), 'desc']],
+          limit: 10
         }
         break;
       case 3:
@@ -195,7 +194,8 @@ class ErrDbsController extends Controller {
             ['content', 'item'],
             [fn('count', col('content')), 'count'],
           ],
-          group: 'content'
+          group: 'content',
+          order: [[fn('count', col('content')), 'desc']],
         }
         break;
       // 异常浏览器，但需要解析浏览器字符串
@@ -225,22 +225,12 @@ class ErrDbsController extends Controller {
     // 返回的是模型实例，可以直接调用几个数组方法，但。。。需注意，无法直接调用
     let totalDbs = await ctx.sqlModel.models.err_dbs.findAll(totalQuery);
     let total = JSON.parse(JSON.stringify(totalDbs))[0].total;
-    // console.log(JSON.parse(JSON.stringify(totalDbs))[0].total);
-    // let total;
-    // totalDbs.forEach(item => {
-    //   total = item.toJSON().total
-    // })
-
-    // 直接操作实例，没有意义
-    // let newList = list.map(item => {
-    //   item.percent = (item.count / total).toFixed(2);
-    //   return item;
-    // })
 
     let res = {
       list,
       total,
     }
+
     await ctx.reqHandler.success(res);
   }
   async delSqlErr() {
@@ -262,6 +252,17 @@ class ErrDbsController extends Controller {
     // ctx.body = ''; // 如果 设为null则是204码。
     // 如果不处理响应，接口则报404
     await ctx.reqHandler.success({});
+  }
+
+  // 获取趋势图的数据
+  async getErrTrand() {
+    const {ctx, app} = this;
+    let query = ctx.request.body;
+
+    // 调用service里的服务
+    let res = await ctx.service.err.getErrTrand(query);
+
+    await ctx.reqHandler.success(res);
   }
 
   // 操作redis里的数据

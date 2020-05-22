@@ -102,7 +102,7 @@ export default {
     return {
       errTypes,
       perfTypes,
-      errType: 1,
+      errType: 2,
       perfType: '',
       errChartData: [],
       restaurants: [],
@@ -121,11 +121,8 @@ export default {
         if (res.data.list.length) {
           this.errChartData = res.data.list.map(item => {
             if (this.errType === 2) {
-              // new Date(Number(item.timestamp)).toLocaleString();
-              // item.item = dayjs(item.item).format('YYYY/MM/DD HH:mm:ss');
-              let date = new Date(item.item).toLocaleDateString()
-              let time = new Date(item.item).toLocaleTimeString()
-              item.item = `${date} ${time}`; // new Date(Number(item.timestamp)).toLocaleString();
+              // g2 的图例是根据数据类型自动生成的，因此为了不生成连续图例，特地修改如下
+              item.item = `日期：${item.item}`;
             }
             item.percent = Number((item.count / res.data.total).toFixed(2));
             return item;

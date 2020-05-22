@@ -1,9 +1,15 @@
 <template>
   <div class="err-detail">
     <LayoutHeader>
-      <TimerSelector></TimerSelector>
+      <TimerSelector :timeRange.sync="queryData.timeRange"/>
     </LayoutHeader>
-    <TrendChart />
+    
+    <!-- 走势图 -->
+    <TrendChart :chartData="trendChartData"/>
+
+    <!-- <div class="action-box">
+      <el-button @click=""  type="primary" size="small">刷新</el-button>
+    </div> -->
 
     <div class="main-box">
       <el-table :max-height="600" :data="tableData" border style="width: 100%;">
@@ -43,7 +49,7 @@
 <script>
 import dayjs from 'dayjs';
 import UaParser from 'ua-parser-js';
-import { getSqlErr } from '@apis/';
+import { getSqlErr, getErrTrand } from '@apis/';
 
 import TrendChart from './components/TrendChart';
 import LayoutHeader from '@layoutApp/header/header';
@@ -59,8 +65,15 @@ export default {
       queryData: {
         pageSize: 10,
         pageNo: 1,
-      }
+        timeRange: 7
+      },
+      trendChartData: []
     };
+  },
+  watch: {
+    'queryData.timeRange'(newVal) {
+      this.getErrTrand();
+    }
   },
   methods: {
     goDetail(row) {
@@ -93,10 +106,30 @@ export default {
           });
         }
       } catch (err) {}
+    },
+    async getErrTrand() {
+      try {
+        let query = {
+          timeRange: this.queryData.timeRange
+        };
+        let res = await getErrTrand(query);
+        let leftArr = Array(17).fill(0).map((item, idx) => {
+          return {
+            count: Math.floor(Math.random()*100),
+            date: `2020-05-${idx + 1}`
+          }
+        })
+        this.trendChartData = leftArr.concat(res.data);
+
+        console.log(res);
+      } catch(err) {
+        console.log(err);
+      }
     }
   },
   created() {
     this.handleErrTypeChange();
+    this.getErrTrand();
   }
 };
 </script>

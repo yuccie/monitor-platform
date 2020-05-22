@@ -1,5 +1,5 @@
 <template>
-<div class="chart">
+<div id="chart" class="chart">
   <div ref="chartDemo"></div>
 </div>
 </template>
@@ -29,6 +29,7 @@ export default {
   },
   methods: {
     initChart(data) {
+      
       // 需要搜集没错错误类型的前多少名
       // 比如从文件名角度，从错误类型，
       const chart = new Chart({
@@ -37,7 +38,7 @@ export default {
         // forceFit: true,
         // autoFit: true,
         // 需要添加宽高值
-        width: 400,
+        width: Number(window.getComputedStyle(document.querySelector('#chart')).width.replace('px', '')) * 0.9,
         height: 600,
         padding:[0,0,0,0]
       });
@@ -56,7 +57,7 @@ export default {
         //   console.log('val', val)
         //   return val;
         // }
-        // offsetX: 10,
+        offsetX: -10,
       }); 
       chart.scale('percent', {
         formatter: val => {
@@ -114,6 +115,8 @@ export default {
     }
   },
   mounted() {
+    console.log(document.querySelector('#chart'));
+    console.log(window.getComputedStyle(document.querySelector('#chart')).width, 'ddd')
     // 如果刚开始数据为空时，会导致chart实例并没有创建，然后数据更新时会不显示图表
     // if (this.errChartData.length) {
       this.$nextTick(() => {

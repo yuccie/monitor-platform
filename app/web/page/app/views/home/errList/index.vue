@@ -113,13 +113,14 @@ export default {
           timeRange: this.queryData.timeRange
         };
         let res = await getErrTrand(query);
-        let leftArr = Array(17).fill(0).map((item, idx) => {
-          return {
-            count: Math.floor(Math.random()*100),
-            date: `2020-05-${idx + 1}`
-          }
-        })
-        this.trendChartData = leftArr.concat(res.data);
+        // let leftArr = Array(17).fill(0).map((item, idx) => {
+        //   return {
+        //     count: Math.floor(Math.random()*100),
+        //     date: `2020-05-${idx + 1}`
+        //   }
+        // })
+        // this.trendChartData = leftArr.concat(res.data);
+        this.trendChartData = res.data;
 
         console.log(res);
       } catch(err) {

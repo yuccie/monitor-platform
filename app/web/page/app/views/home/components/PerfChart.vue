@@ -28,7 +28,7 @@ export default {
         // forceFit: true,
         // autoFit: true,
         // 需要添加宽高值
-        width: 401,
+        width: 400,
         height: 600,
         // padding:[0,0,0,0]
       });

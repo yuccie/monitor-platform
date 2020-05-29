@@ -22,6 +22,7 @@ export default {
         })
       },
       deep: true,
+      immedate: true
     }
   },
   data() {
@@ -29,7 +30,7 @@ export default {
   },
   methods: {
     initChart(data) {
-      
+      // Number(window.getComputedStyle(document.querySelector('#chart')).width.replace('px', '')) * 0.9
       // 需要搜集没错错误类型的前多少名
       // 比如从文件名角度，从错误类型，
       const chart = new Chart({
@@ -38,7 +39,7 @@ export default {
         // forceFit: true,
         // autoFit: true,
         // 需要添加宽高值
-        width: Number(window.getComputedStyle(document.querySelector('#chart')).width.replace('px', '')) * 0.9,
+        width: 400,
         height: 600,
         padding:[0,0,0,0]
       });
@@ -57,7 +58,7 @@ export default {
         //   console.log('val', val)
         //   return val;
         // }
-        offsetX: -10,
+        // offsetX: -10,
       }); 
       chart.scale('percent', {
         formatter: val => {

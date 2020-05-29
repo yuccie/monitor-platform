@@ -7,15 +7,23 @@ class ErrService extends Service {
   async getErrTrand(query) {
     const { ctx, app } = this;
     const { fn, col, where, SELECT } = app.Sequelize;
+    const { timeRange } = query;
 
     let sequelize = ctx.sqlModel.models.err_dbs.sequelize;
 
     // 近7天
+    // let sqlQuery = `
+    //   select date_format(created_at, '%Y-%m-%d') date,count(*) count from err_dbs
+    //   where date_sub(CURDATE(),INTERVAL ${timeRange} DAY) <= DATE(created_at)
+    //   group by date_format(created_at, '%Y-%m-%d')
+    //   order by date_format(created_at, '%Y-%m-%d')
+    // `;
+    // left outer join date_dbs d
     let sqlQuery = `
-      select date_format(created_at, '%Y-%m-%d') date,count(*) count from err_dbs
-      where date_sub(CURDATE(),INTERVAL ${query.timeRange} DAY) <= DATE(created_at)
-      group by date_format(created_at, '%Y-%m-%d')
-      order by date_format(created_at, '%Y-%m-%d')
+      select date_format(e.created_at, '%Y-%m-%d') date, count(*) count from err_dbs e
+      where e.created_at >= date_sub(curdate(), interval ${timeRange} day)
+      group by date_format(e.created_at, '%Y-%m-%d')
+      order by date_format(e.created_at, '%Y-%m-%d')
     `;
 
     // res 数组元素怎么是两个，而且两个完全一样?

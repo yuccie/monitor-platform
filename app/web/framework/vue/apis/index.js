@@ -105,3 +105,19 @@ export function getErrTrand(data) {
   });
 }
 
+// 获取单条sql数据
+export function getErrDetail(data) {
+  return request({
+    url: `/getErrDetail`,
+    data,
+  });
+}
+
+// 删除单条sql数据
+export function delErrDetail(data) {
+  return request({
+    url: `/delErrDetail`,
+    data,
+  });
+}
+

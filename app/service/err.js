@@ -19,15 +19,60 @@ class ErrService extends Service {
     //   order by date_format(created_at, '%Y-%m-%d')
     // `;
     // left outer join date_dbs d
+
+
+    // 暂时都默认30天
     let sqlQuery = `
       select date_format(e.created_at, '%Y-%m-%d') date, count(*) count from err_dbs e
-      where e.created_at >= date_sub(curdate(), interval ${timeRange} day)
+      where e.created_at >= date_sub(curdate(), interval 30 day)
       group by date_format(e.created_at, '%Y-%m-%d')
       order by date_format(e.created_at, '%Y-%m-%d')
     `;
 
     // res 数组元素怎么是两个，而且两个完全一样?
     // 默认情况下，该query函数会返回两个参数 - 一个包含结果的数组和一个包含原数据对象
+    let res = await sequelize.query(sqlQuery).spread((results, metadata) => results);
+
+    return res;
+  }
+
+  // 获取单条异常信息
+  async getErrDetail(query) {
+    const { ctx, app } = this;
+    let { id } = query;
+    let sequelize = ctx.sqlModel.models.err_dbs.sequelize;
+
+    let sqlQuery = `
+      select * from err_dbs e
+      where e.id = ${id}
+    `;
+    let res = await sequelize.query(sqlQuery).spread((results, metadata) => {
+      let temp = {};
+
+      // results[0] is not iterable
+      // for (let [key, val] of results[0]) {
+      //   key = ctx.helper.toHump(key);
+      //   temp[key] = val;
+      // }
+      temp = ctx.helper.objKeyToHump(results[0]);
+
+      return temp;
+    });
+
+    return res;
+  }
+
+  // 删除单条异常信息
+  async delErrDetail(query) {
+    const { ctx, app } = this;
+    let sequelize = ctx.sqlModel.models.err_dbs.sequelize;
+
+    console.log('query.id', query);
+
+    let sqlQuery = `
+      select * from err_dbs e
+      where e.id = ${query.id}
+    `;
     let res = await sequelize.query(sqlQuery).spread((results, metadata) => results);
 
     return res;

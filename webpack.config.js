@@ -21,6 +21,11 @@ module.exports = {
   // 需要开启rules并添加loaders
   rules: [
     { scss: true },
+    {
+      test: /\.map$/,
+      use: ["source-map-loader"],
+      enforce: "pre"
+    }
   ],
   loaders: {
     scss: {
@@ -31,9 +36,10 @@ module.exports = {
           ]
         }
       }
-    }
+    },
   },
   plugins: [{
+    // 这里可以直接拷贝，相当于静态文件
     copy: [{
       from: 'app/web/asset/css/bootstrap.min.css',
       to: 'asset/css/bootstrap.min.css'

@@ -41,6 +41,10 @@ module.exports = app => {
     'errHandler',
     'reqHandler'
   ];
+  // 增加静态资源
+  exports.assets = {
+    publicPath: '/public/',
+  };
 
   // 增加mongoose
   exports.mongoose = {

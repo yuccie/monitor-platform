@@ -1,15 +1,15 @@
 <template>
   <div class="err-detail">
     <LayoutHeader>
-      <TimerSelector :timeRange.sync="queryData.timeRange"/>
+      <TimerSelector :timeRange.sync="queryData.timeRange" />
     </LayoutHeader>
-    
+
     <!-- 走势图 -->
-    <TrendChart :chartData="trendChartData"/>
+    <TrendChart :chartData="trendChartData" />
 
     <!-- <div class="action-box">
       <el-button @click=""  type="primary" size="small">刷新</el-button>
-    </div> -->
+    </div>-->
 
     <div class="main-box">
       <el-table :max-height="600" :data="tableData" border style="width: 100%;">
@@ -26,7 +26,7 @@
         <el-table-column align="center" fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button @click="goDetail(scope.row)" type="text" size="small">详情</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button type="text" size="small" @click="delErrDetail(scope)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -49,7 +49,7 @@
 <script>
 import dayjs from 'dayjs';
 import UaParser from 'ua-parser-js';
-import { getSqlErr, getErrTrand } from '@apis/';
+import { getSqlErr, getErrTrand, delErrDetail } from '@apis/';
 
 import TrendChart from './components/TrendChart';
 import LayoutHeader from '@layoutApp/header/header';
@@ -76,8 +76,26 @@ export default {
     }
   },
   methods: {
-    goDetail(row) {
-      this.$router.push({ name: 'ErrDetail' });
+    goDetail({id}) {
+      let query = {
+        id
+      }
+      this.$router.push({ name: 'ErrDetail', query });
+    },
+    async delErrDetail(scope) {
+      console.log(scope, 'tableData');
+      let { $index } = scope;
+      let { id } = scope.row;
+
+      try {
+        let res = await delErrDetail({id});
+        if (res) {
+          // 成功从当前列表删除该元素
+          this.tableData.splice($index,1);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     },
     handleSizeChange(val) {
       this.queryData.pageSize = val;
@@ -88,11 +106,9 @@ export default {
       this.handleErrTypeChange();
     },
     async handleErrTypeChange() {
-
       try {
         let res = await getSqlErr(this.queryData);
         if (res.code === 0) {
-
           this.tableData = res.data.list.map(item => {
             if (item.userAgent) {
               let UA = UaParser(item.userAgent);
@@ -123,7 +139,7 @@ export default {
         this.trendChartData = res.data;
 
         console.log(res);
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
     }

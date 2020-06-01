@@ -57,8 +57,8 @@ win.onerror = function (message, fileName, lineNumber, columnNumber, error) {
 
     // error对象原本只有message和stack属性，下面是修改原有error对象
     error.fileName = fileName.split(' ')[0];
-    error.lineNumber = lineNumber;
-    error.columnNumber = columnNumber;
+    error.lineNumber = lineNumber || null;
+    error.columnNumber = columnNumber || null;
     error.recentClickEventList = recentClickEventList;
     error.recentAjaxList = recentAjaxList;
     collect(error, '' + error.message + error.fileName + error.lineNumber + error.columnNumber);

@@ -8,9 +8,10 @@
           <div slot="header" class="clearfix">
             <strong>错误信息</strong>
             <el-switch class="switch" v-model="source" active-color="#13ce66" inactive-color="#eee"></el-switch>
+
+            <!-- @focus="abortGetSourcemapContent" -->
             <el-input
               @keyup.enter.native="getSourcemapContent"
-              @focus="abortGetSourcemapContent"
               v-model="sourceMapUrl"
               class="sourcemap-url"
               size="small"
@@ -49,7 +50,11 @@
                   <h3>at {{item.source}}:{{item.line}}:{{item.column}}</h3>
                   <pre v-highlightjs><code class="javascript">{{item.code}}</code></pre>
                   <div class="line-number">
-                    <div v-for="number in item.lineNumbers" :key="number"  :class="{hight: number == item.line}">
+                    <div
+                      v-for="number in item.lineNumbers"
+                      :key="number"
+                      :class="{hight: number == item.line}"
+                    >
                       <i class="el-icon-caret-right" v-if="number == item.line"></i>
                       {{number}}
                     </div>
@@ -223,21 +228,19 @@
 
 <script>
 import LayoutHeader from '@layoutApp/header/header';
+import { getErrDetail } from '@apis/';
+import UAParser from 'ua-parser-js';
 import { mapState } from 'vuex';
+
+sourceMap.SourceMapConsumer.initialize({
+  'lib/mappings.wasm': `/public/static/sourcemap/0.7.0/mappings.wasm`
+});
+
 export default {
   components: { LayoutHeader },
   data() {
     return {
-      errorDetail: {
-        name: '王小虎',
-        content: '上海市普陀区金沙江路 1518 弄',
-        url: '上海市普陀区金沙江路 1518 弄',
-        errorType: 'js',
-        disBrowser: 'chrome',
-        disOs: 'mac',
-        ip: '127.0.0.1',
-        errorTime: '2016-05-02'
-      },
+      errorDetail: {},
       title: 'DETAIL',
       source: false,
       sourceMapUrl: '',
@@ -247,32 +250,55 @@ export default {
       originalStack: [],
       fileContent: '',
       fileErrorCode: '',
-      sourceMapContent: '',
-      fileErrorCode: ''
+      // sourceMapContent: require(''),
+      fileErrorCode: '',
+      prevSourceMapURL: ''
     };
   },
 
   computed: {
     // ...mapState(['errorDetail']),
-    recentClickEventList() {
-      let list = JSON.parse(this.errorDetail.recentClickEventList);
-      return list.reverse();
-    },
-    recentAjaxList() {
-      let list = JSON.parse(this.errorDetail.recentAjaxList);
-      return list.reverse();
+    // recentClickEventList() {
+    //   let list = JSON.parse(this.errorDetail.recentClickEventList);
+    //   return list.reverse();
+    // },
+    // recentAjaxList() {
+    //   let list = JSON.parse(this.errorDetail.recentAjaxList);
+    //   return list.reverse();
+    // },
+    routeQuery() {
+      return this.$route.query;
     }
   },
 
   watch: {
     source(newValue, oldValue) {
-      if (newValue && !oldValue) {
+      if (newValue) {
         this.getSourcemapContent();
       }
     }
   },
 
   methods: {
+    async getErrDetail() {
+      let reqData = {
+        id: this.routeQuery.id
+      };
+      try {
+        let res = await getErrDetail(reqData);
+        if (res) {
+          let item = res.data;
+          item.userAgent = UAParser(item.userAgent);
+          item.disBrowser = `${item.userAgent.browser.name} ${item.userAgent.browser.version}`;
+          item.disOs = `${item.userAgent.os.name} ${item.userAgent.os.version}`;
+          this.sourceMapUrl = item.fileName + '.map';
+
+          this.errorDetail = item;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     // 截取出错代码片段（当前文件）
     getFileCode(lineNumber, columnNumber) {
       lineNumber = lineNumber || this.errorDetail.lineNumber;
@@ -285,14 +311,14 @@ export default {
 
     // 获取 sourcemap 内容
     getSourcemapContent: async function() {
-      if (prevSourceMapURL != this.sourceMapUrl) {
+      if (this.prevSourceMapURL !== this.sourceMapUrl) {
         try {
           const sourceMapContent = await axios.get(`${API_PROXY}?u=${this.sourceMapUrl}`, {
             hideMessage: true
           });
           consumer = await new sourceMap.SourceMapConsumer(sourceMapContent);
           this.getOriginalStack();
-          prevSourceMapURL = this.sourceMapUrl;
+          this.prevSourceMapURL = this.sourceMapUrl;
         } catch (e) {
           console.log(e);
         }
@@ -301,6 +327,7 @@ export default {
 
     // 取消获取 sourcemap 的 ajax 请求
     abortGetSourcemapContent() {
+      console.log('获取焦点了');
       // axiosCancelTokenSource.cancel('sourcemap url will change!');
     },
 
@@ -372,15 +399,36 @@ export default {
   },
 
   created() {
-    if (!this.errorDetail || this.errorDetail._id != this.$route.query._id) {
-      this.getData();
-    } else {
-      this.sourceMapUrl = this.errorDetail.fileName.replace(/\?.*$/, '') + '.map';
-      this.getFileContent();
-    }
+    this.getErrDetail();
+    // if (!this.errorDetail || this.errorDetail._id != this.$route.query._id) {
+    //   this.getData();
+    // } else {
+    //   this.sourceMapUrl = this.errorDetail.fileName.replace(/\?.*$/, '') + '.map';
+    //   this.getFileContent();
+    // }
   },
-
-  mounted() {}
+  async mounted() {
+    let sourceMapContent = {
+      version: 3,
+      sources: ['hello.js'],
+      names: ['sayHello', 'greeting', 'Name', 'console', 'log'],
+      mappings: 'AAAA,QAASA,KAEL,GACIC,GAAW,UAAYC,IAC3BC,SAAQC,IAAIH,GAGhBD',
+      file: 'hello.min.js',
+      sourceRoot: '',
+      sourcesContent: [
+        'function sayHello()\n{\n    var name = "Fundebug";\n    var greeting = "Hello, " + Name;\n    console.log(greeting);\n}\n\nsayHello();\n'
+      ]
+    };
+    console.log('sourceMap', window.sourceMap);
+    // sourceMapContent，这个map文件，要么后台返回，要么前端添加loader加载
+    let consumer = await new sourceMap.SourceMapConsumer(sourceMapContent);
+    console.log('consumer', consumer);
+    let original = consumer.originalPositionFor({
+      line: 1,
+      column: 1
+    });
+    console.log(original);
+  }
 };
 </script>
 
@@ -434,6 +482,8 @@ export default {
             color: rgb(157, 157, 161);
             word-break: break-word;
             padding-right: 10px;
+            min-width: 50px;
+            text-align: left;
           }
         }
       }

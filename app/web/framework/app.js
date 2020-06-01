@@ -61,7 +61,7 @@ export default class App {
     router.afterEach((route, redirec) => {
       console.log('>>afterEach', route);
       if (route.matched && route.matched.length) {
-        const asyncData = route.matched[0].components.default.asyncData;
+        const asyncData = route.matched[0].components && route.matched[0].components.default.asyncData;
         if (asyncData) {
           asyncData(store);
         }

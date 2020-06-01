@@ -17,6 +17,8 @@ module.exports = app => {
   app.get('/delSqlErr', app.controller.err.delSqlErr);
   app.post('/updateSqlErr', app.controller.err.updateSqlErr);
   app.post('/getErrTrand', app.controller.err.getErrTrand); // 获取异常监控里的错误趋势图
+  app.post('/getErrDetail', app.controller.err.getErrDetail); // 获取单条异常数据
+  app.post('/delErrDetail', app.controller.err.delErrDetail); // 删除单条异常数据
 
   // 操作redis里的方法
   app.get('/getRedisErr', app.controller.err.getRedisErr);

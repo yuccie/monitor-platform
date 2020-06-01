@@ -265,6 +265,28 @@ class ErrDbsController extends Controller {
     await ctx.reqHandler.success(res);
   }
 
+  // 查看单条异常数据
+  async getErrDetail() {
+    const {ctx, app} = this;
+    let query = ctx.request.body;
+
+    // 调用service里的服务
+    let res = await ctx.service.err.getErrDetail(query);
+
+    await ctx.reqHandler.success(res);
+  }
+
+  // 删除单条异常数据
+  async delErrDetail() {
+    const {ctx, app} = this;
+    let query = ctx.request.body;
+
+    // 调用service里的服务
+    let res = await ctx.service.err.delErrDetail(query);
+
+    await ctx.reqHandler.success(res);
+  }
+
   // 操作redis里的数据
   async setRedisErr(newVal) {
     const { ctx, app } = this;

@@ -228,10 +228,10 @@
 
 <script>
 import LayoutHeader from '@layoutApp/header/header';
-import { getErrDetail } from '@apis/';
+import { getErrDetail, getSourceMap } from '@apis/';
 import UAParser from 'ua-parser-js';
 import { mapState } from 'vuex';
-
+let consumer;
 sourceMap.SourceMapConsumer.initialize({
   'lib/mappings.wasm': `/public/static/sourcemap/0.7.0/mappings.wasm`
 });
@@ -313,12 +313,14 @@ export default {
     getSourcemapContent: async function() {
       if (this.prevSourceMapURL !== this.sourceMapUrl) {
         try {
-          const sourceMapContent = await axios.get(`${API_PROXY}?u=${this.sourceMapUrl}`, {
-            hideMessage: true
-          });
-          consumer = await new sourceMap.SourceMapConsumer(sourceMapContent);
-          this.getOriginalStack();
-          this.prevSourceMapURL = this.sourceMapUrl;
+
+          let res = await getSourceMap();
+          if (res) {
+            let sourceMapContent = res.data;
+            consumer = await new sourceMap.SourceMapConsumer(sourceMapContent);
+            // this.getOriginalStack();
+            this.prevSourceMapURL = this.sourceMapUrl;
+          }
         } catch (e) {
           console.log(e);
         }
@@ -400,6 +402,7 @@ export default {
 
   created() {
     this.getErrDetail();
+    // console.log(a);
     // if (!this.errorDetail || this.errorDetail._id != this.$route.query._id) {
     //   this.getData();
     // } else {
@@ -407,28 +410,6 @@ export default {
     //   this.getFileContent();
     // }
   },
-  async mounted() {
-    let sourceMapContent = {
-      version: 3,
-      sources: ['hello.js'],
-      names: ['sayHello', 'greeting', 'Name', 'console', 'log'],
-      mappings: 'AAAA,QAASA,KAEL,GACIC,GAAW,UAAYC,IAC3BC,SAAQC,IAAIH,GAGhBD',
-      file: 'hello.min.js',
-      sourceRoot: '',
-      sourcesContent: [
-        'function sayHello()\n{\n    var name = "Fundebug";\n    var greeting = "Hello, " + Name;\n    console.log(greeting);\n}\n\nsayHello();\n'
-      ]
-    };
-    console.log('sourceMap', window.sourceMap);
-    // sourceMapContent，这个map文件，要么后台返回，要么前端添加loader加载
-    let consumer = await new sourceMap.SourceMapConsumer(sourceMapContent);
-    console.log('consumer', consumer);
-    let original = consumer.originalPositionFor({
-      line: 1,
-      column: 1
-    });
-    console.log(original);
-  }
 };
 </script>
 

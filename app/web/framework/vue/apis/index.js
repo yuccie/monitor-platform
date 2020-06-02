@@ -121,3 +121,11 @@ export function delErrDetail(data) {
   });
 }
 
+// 获取sourcemap 文件
+export function getSourceMap(data) {
+  return request({
+    url: `/getSourceMap`,
+    method: 'get',
+  });
+}
+

@@ -20,16 +20,8 @@ module.exports = async app => {
       errorType: STRING,
       url: STRING,
       errorLevel: INTEGER,
-      // stack: {
-      //   type: ARRAY,
-      //   values: {
-      //     columnNumber: INTEGER,
-      //     lineNumber: INTEGER,
-      //     fileName: STRING,
-      //     functionName: STRING,
-      //     source: STRING
-      //   }
-      // },
+      // 数据库中无法储存数组，直接将数组序列化存入
+      stack: STRING(10000),
       // stack: [
       //   {
       //     columnNumber: INTEGER,
@@ -42,15 +34,11 @@ module.exports = async app => {
       lineNumber: INTEGER,
       columnNumber: INTEGER,
       fileName: STRING,
-      // recentClickEventList: Mixed,
-      // recentAjaxList: Mixed,
+      recentClickEventList: STRING,
+      recentAjaxList: STRING,
       timestamp: STRING,
       // cookies: STRING,
       userAgent: STRING,
-      // test: {
-      //   type: STRING,
-      //   defaultValue: "test的默认值"
-      // }
     },
     // 默认情况下，Sequelize 会执行自动复数化，也就是将模型名改成复数形式
     // 然后作为表名，但为了统一起来，统一禁止自动复数，这里的tableName其实就是模型名

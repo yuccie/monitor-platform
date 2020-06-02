@@ -246,6 +246,12 @@ class ErrDbsController extends Controller {
     let errInfo = ctx.request.body;
     errInfo.userAgent = ctx.request.header['user-agent'];
 
+    //   stack: STRING,
+    // recentClickEventList: STRING,
+    // recentAjaxList: STRING,
+    errInfo.stack = JSON.stringify(errInfo.stack)
+    errInfo.recentClickEventList = JSON.stringify(errInfo.recentClickEventList)
+    errInfo.recentAjaxList = JSON.stringify(errInfo.recentAjaxList)
     // res其实是err_dbs的一个实例，
     // 意味着，可以通过res直接操作数据库里的字段，但需要save才能生效
     await ctx.sqlModel.models.err_dbs.create(errInfo);
@@ -284,6 +290,16 @@ class ErrDbsController extends Controller {
     // 调用service里的服务
     let res = await ctx.service.err.delErrDetail(query);
 
+    await ctx.reqHandler.success(res);
+  }
+
+  // 获取单条异常数据的map数据
+  async getSourceMap() {
+    const {ctx, app} = this;
+    let query = ctx.request.body;
+
+    // 调用service里的服务
+    let res = await ctx.service.err.getSourceMap(query);
     await ctx.reqHandler.success(res);
   }
 

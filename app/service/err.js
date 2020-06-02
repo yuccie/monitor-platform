@@ -1,4 +1,8 @@
 const Service = require('egg').Service;
+const fs = require('fs');
+const path = require('path');
+const readFile = require('fs').readFile;
+// const mapFile = require('../mocks/map/bundle.js.map');
 
 // 操作什么范围内的数据库
 // https://blog.csdn.net/ls1645/article/details/79118464
@@ -19,7 +23,6 @@ class ErrService extends Service {
     //   order by date_format(created_at, '%Y-%m-%d')
     // `;
     // left outer join date_dbs d
-
 
     // 暂时都默认30天
     let sqlQuery = `
@@ -55,7 +58,7 @@ class ErrService extends Service {
       //   temp[key] = val;
       // }
       temp = ctx.helper.objKeyToHump(results[0]);
-
+      temp.stack = JSON.parse(temp.stack)
       return temp;
     });
 
@@ -70,12 +73,44 @@ class ErrService extends Service {
     console.log('query.id', query);
 
     let sqlQuery = `
-      select * from err_dbs e
+      delete from err_dbs e
       where e.id = ${query.id}
     `;
     let res = await sequelize.query(sqlQuery).spread((results, metadata) => results);
 
     return res;
+  }
+
+  // 获取source map文件
+  async getSourceMap(query) {
+    const { ctx, app } = this;
+    // let sequelize = ctx.sqlModel.models.err_dbs.sequelize;
+
+    // console.log('query.id', query);
+
+    // let sqlQuery = `
+    //   select * from err_dbs e
+    //   where e.id = ${query.id}
+    // `;
+    // let res = await sequelize.query(sqlQuery).spread((results, metadata) => results);
+    console.log('pwd', __dirname);
+    let str = '';
+
+    // promise也需要返回才行
+    return new Promise((resolve, reject) => {
+      fs.readFile(path.join(__dirname, `../mocks/map/bundle.js.map`), { encoding: 'utf-8' }, function(err, fr) {
+        //readFile回调函数
+        if (err) {
+          reject(err)
+          console.log(err, '不存咋爱');
+        } else {
+          str = JSON.parse(fr);
+        }
+        resolve(str);
+        // return str;
+      });
+    })
+
   }
 }
 

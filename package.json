@@ -30,6 +30,7 @@
     "egg-validate": "^1.0.0",
     "egg-view-vue-ssr": "^3.0.2",
     "element-ui": "^2.0.8",
+    "highlight.js": "^10.0.3",
     "lodash": "^4.17.4",
     "moment": "^2.17.1",
     "mysql2": "^2.1.0",

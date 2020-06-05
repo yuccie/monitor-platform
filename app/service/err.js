@@ -102,7 +102,6 @@ class ErrService extends Service {
         //readFile回调函数
         if (err) {
           reject(err)
-          console.log(err, '不存咋爱');
         } else {
           str = JSON.parse(fr);
         }

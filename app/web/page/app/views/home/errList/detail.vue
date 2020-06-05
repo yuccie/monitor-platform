@@ -48,7 +48,7 @@
               <div v-if="originalStack.length" class="stack-container">
                 <div v-for="(item, index) in originalStack" :key="index" class="stack-item">
                   <h3>at {{item.source}}:{{item.line}}:{{item.column}}</h3>
-                  <pre v-highlightjs><code class="javascript">{{item.code}}</code></pre>
+                  <pre v-highlightjs><code class="js">{{item.code}}</code></pre>
                   <div class="line-number">
                     <div
                       v-for="number in item.lineNumbers"
@@ -227,14 +227,48 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import LayoutHeader from '@layoutApp/header/header';
 import { getErrDetail, getSourceMap } from '@apis/';
 import UAParser from 'ua-parser-js';
-import { mapState } from 'vuex';
-let consumer;
+
+// 语法高亮，需要css样式
+import hljs from 'highlight.js/lib/core';
+import 'highlight.js/styles/github.css';
+
 sourceMap.SourceMapConsumer.initialize({
   'lib/mappings.wasm': `/public/static/sourcemap/0.7.0/mappings.wasm`
 });
+
+Vue.directive('highlightjs', {
+  deep: true,
+  bind: function(el, binding) {
+    setTimeout(() => {
+      let targets = el.querySelectorAll('pre code');
+      targets.forEach(target => {
+        if (binding.value) {
+          target.textContent = binding.value;
+        }
+        debugger
+        hljs.highlightBlock(target);
+      });
+    });
+  },
+  componentUpdated: function(el, binding) {
+    setTimeout(() => {
+      let targets = el.querySelectorAll('pre code');
+      targets.forEach(target => {
+        if (binding.value) {
+          target.textContent = binding.value;
+        }
+        debugger
+        hljs.highlightBlock(target);
+      });
+    });
+  }
+});
+
+let consumer;
 
 export default {
   components: { LayoutHeader },
@@ -250,22 +284,19 @@ export default {
       originalStack: [],
       fileContent: '',
       fileErrorCode: '',
-      // sourceMapContent: require(''),
-      fileErrorCode: '',
       prevSourceMapURL: ''
     };
   },
 
   computed: {
-    // ...mapState(['errorDetail']),
-    // recentClickEventList() {
-    //   let list = JSON.parse(this.errorDetail.recentClickEventList);
-    //   return list.reverse();
-    // },
-    // recentAjaxList() {
-    //   let list = JSON.parse(this.errorDetail.recentAjaxList);
-    //   return list.reverse();
-    // },
+    recentClickEventList() {
+      let list = JSON.parse(this.errorDetail.recentClickEventList);
+      return list.reverse();
+    },
+    recentAjaxList() {
+      let list = JSON.parse(this.errorDetail.recentAjaxList);
+      return list.reverse();
+    },
     routeQuery() {
       return this.$route.query;
     }
@@ -292,8 +323,8 @@ export default {
           item.disBrowser = `${item.userAgent.browser.name} ${item.userAgent.browser.version}`;
           item.disOs = `${item.userAgent.os.name} ${item.userAgent.os.version}`;
           this.sourceMapUrl = item.fileName + '.map';
-
           this.errorDetail = item;
+          // this.getFileContent();
         }
       } catch (err) {
         console.log(err);
@@ -310,15 +341,14 @@ export default {
     },
 
     // 获取 sourcemap 内容
-    getSourcemapContent: async function() {
+    async getSourcemapContent() {
       if (this.prevSourceMapURL !== this.sourceMapUrl) {
         try {
-
           let res = await getSourceMap();
           if (res) {
             let sourceMapContent = res.data;
             consumer = await new sourceMap.SourceMapConsumer(sourceMapContent);
-            // this.getOriginalStack();
+            this.getOriginalStack();
             this.prevSourceMapURL = this.sourceMapUrl;
           }
         } catch (e) {
@@ -333,7 +363,7 @@ export default {
       // axiosCancelTokenSource.cancel('sourcemap url will change!');
     },
 
-    // 获取源文件的堆栈信息
+    // 解析源文件的堆栈信息
     getOriginalStack() {
       this.originalStack = this.errorDetail.stack
         .map((item, index) => {
@@ -350,12 +380,16 @@ export default {
           if (!original.source) {
             return false;
           }
+          // 留意ArraySet数据类型，下面一行将源码分割成单行，并生成html标签
           const sourceContent = consumer.sourceContentFor(original.source).split('\n');
           const sourceContentLine = sourceContent.length;
+
+          // 为何 - size，size为何为5？
           let minLine = original.line - size;
           let maxLine = original.line + size;
           original.minLine = minLine < 1 ? 1 : minLine;
           original.maxLine = maxLine > sourceContentLine ? sourceContentLine : maxLine;
+
           original.code = sourceContent
             .splice(original.minLine - 1, original.maxLine - original.minLine + 1)
             .join('\n');
@@ -372,7 +406,7 @@ export default {
         });
     },
 
-    // 获取异常 js 文件内容
+    // 获取异常 js 文件内容？什么格式的数据？
     getFileContent() {
       axios
         .get(`${API_PROXY}?u=${this.errorDetail.fileName}`, {
@@ -382,34 +416,26 @@ export default {
           this.fileContent = data;
           this.fileErrorCode = this.getFileCode();
         });
-    },
-
-    // 从服务端获取错误详情
-    getData() {
-      axios.get(`${API_LOG}?id=${this.$route.query._id}`).then(data => {
-        let item = data.value;
-        item.moment = moment(item.timestamp);
-        item.errorTime = item.moment.format('YYYY-MM-DD HH:mm:ss');
-        item.userAgent = UAParser(item.userAgent);
-        item.disBrowser = `${item.userAgent.browser.name} ${item.userAgent.browser.version}`;
-        item.disOs = `${item.userAgent.os.name} ${item.userAgent.os.version}`;
-        this.$store.commit('errorDetail', item);
-        this.sourceMapUrl = item.fileName + '.map';
-        this.getFileContent();
-      });
     }
   },
 
   created() {
     this.getErrDetail();
-    // console.log(a);
-    // if (!this.errorDetail || this.errorDetail._id != this.$route.query._id) {
-    //   this.getData();
+    // if (!this.errorDetail || this.errorDetail.id != this.$route.query.id) {
+    //   this.getErrDetail();
     // } else {
-    //   this.sourceMapUrl = this.errorDetail.fileName.replace(/\?.*$/, '') + '.map';
-    //   this.getFileContent();
+    //   // this.sourceMapUrl = this.errorDetail.fileName.replace(/\?.*$/, '') + '.map';
+    //   // this.getFileContent();
     // }
-  },
+    // try {
+    //   setTimeout(() => {
+    //     console.log(aa)
+    //   });
+    // } catch (e) {
+    //   console.log('我感知不到错误');
+    //   console.log(e);
+    // }
+  }
 };
 </script>
 
@@ -483,11 +509,15 @@ export default {
             padding: 5px;
             padding-top: 0;
             position: relative;
+            // display: flex;
             h3 {
               font-weight: normal;
               font-size: 14px;
               line-height: 260%;
               /*color: #f56c6c;*/
+            }
+            pre {
+              padding: 20px;
             }
             pre.online-code {
               overflow-x: auto;
@@ -495,6 +525,10 @@ export default {
               background: #fbf1c7;
               border-radius: 7px;
               margin-bottom: 7px;
+            }
+            .js {
+              position: relative;
+              left: 80px;
             }
             .line-number {
               box-sizing: border-box;

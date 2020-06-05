@@ -2,7 +2,7 @@
   <header class="header">
     <div class="header-box">
       <h1 class="logo">
-        <a href="/" class="router-link-active">monitor platform</a>
+        <a href="/" class="router-link-active">platform</a>
       </h1>
 
       <div class="actions">

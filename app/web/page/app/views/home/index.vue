@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <LayoutHeader>
-      <TimerSelector></TimerSelector>
+      <TimerSelector :timeRange.sync="timeRange"></TimerSelector>
 
       <el-autocomplete
         size="small"
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { getErr, getSqlErr } from '@apis/';
+import { getErr, getTypeErr } from '@apis/';
 import UaParser from 'ua-parser-js';
 import dayjs from 'dayjs';
 import LayoutHeader from '@layoutApp/header/header';
@@ -107,17 +107,24 @@ export default {
       errChartData: [],
       restaurants: [],
       state1: '',
-      state2: ''
+      state2: '',
+      timeRange: 7
     };
+  },
+  watch: {
+    timeRange(newRange) {
+      this.handleErrTypeChange();
+    }
   },
   methods: {
     async handleErrTypeChange() {
       let reqData = {
+        timeRange: this.timeRange,
         errType: this.errType
       };
       try {
         // let res = await getErr(reqData);
-        let res = await getSqlErr(reqData);
+        let res = await getTypeErr(reqData);
         if (res.data.list.length) {
           this.errChartData = res.data.list.map(item => {
             if (this.errType === 2) {
@@ -128,7 +135,6 @@ export default {
             return item;
           });
         }
-        console.log('res 请求了', res);
       } catch (err) {}
     },
     goWhichDetail(type) {

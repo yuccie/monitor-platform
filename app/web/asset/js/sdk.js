@@ -20,6 +20,7 @@ monitor.vuePlugin = {
       error = error || {};
       error.stack = error.stack;
       error.message = error.message;
+
       // 搜集错误
       collect(error, error.message + JSON.stringify(error.stack));
       // 继续调用之前的错误处理程序
@@ -44,6 +45,7 @@ win.onclick = function(e) {
   if (recentClickEventList.length > 10) {
     recentClickEventList.shift();
   }
+
   recentClickEventList.push(onClickEvent);
 };
 

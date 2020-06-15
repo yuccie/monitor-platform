@@ -16,12 +16,12 @@ module.exports = async app => {
 
   // 定义数据
   // 如果只插入日期字符串呢？
-  // let dateList = Array.from({length: 30}, (item, idx) => {
-  //   let curDate = Date.now();
+  // let dateList = Array.from({length: 365}, (item, idx) => {
   //   let oneDay = 24*60*60*1000;
+  //   let curDate = Date.now() - oneDay * 30;
   //   item = {
-  //     create_time: curDate - idx * oneDay,
-  //     update_time: curDate - idx * oneDay,
+  //     create_time: curDate + idx * oneDay,
+  //     update_time: curDate + idx * oneDay,
   //   }
   //   return item
   // })

@@ -249,7 +249,6 @@ Vue.directive('highlightjs', {
         if (binding.value) {
           target.textContent = binding.value;
         }
-        debugger
         hljs.highlightBlock(target);
       });
     });
@@ -261,7 +260,6 @@ Vue.directive('highlightjs', {
         if (binding.value) {
           target.textContent = binding.value;
         }
-        debugger
         hljs.highlightBlock(target);
       });
     });
@@ -344,7 +342,7 @@ export default {
     async getSourcemapContent() {
       if (this.prevSourceMapURL !== this.sourceMapUrl) {
         try {
-          let res = await getSourceMap();
+          let res = await getSourceMap({url: this.sourceMapUrl});
           if (res) {
             let sourceMapContent = res.data;
             consumer = await new sourceMap.SourceMapConsumer(sourceMapContent);

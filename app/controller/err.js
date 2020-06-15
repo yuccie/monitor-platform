@@ -157,12 +157,12 @@ class ErrDbsController extends Controller {
   }
 
   // 操作mysql里的数据
-  async getSqlErr() {
+  async getTypeErr() {
     const { ctx, app } = this;
-    let { errType } = ctx.request.body;
+    let { errType, timeRange } = ctx.request.body;
 
     // fn是聚合，Op是运算对象，里面还有Op.or，Op.eq等等，
-    const { fn, col } = app.Sequelize;
+    const { fn, col, Op } = app.Sequelize;
     let query = {};
 
     switch(errType) {
@@ -174,7 +174,14 @@ class ErrDbsController extends Controller {
             ['name', 'item'],
             [fn('count', col('name')), 'count'],
           ],
-          group: 'name'
+          group: 'name',
+          where: {
+            createdAt: {
+              [Op.lt]: new Date(),
+              [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000 * timeRange)
+            }
+          },
+          limit: 10
         }
         break;
       case 2:
@@ -183,6 +190,12 @@ class ErrDbsController extends Controller {
             [fn('DATE', col('created_at')), 'item'],
             [fn('count', '*'), 'count'],
           ],
+          where: {
+            createdAt: {
+              [Op.lt]: new Date(),
+              [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000 * timeRange)
+            }
+          },
           group: [fn('DATE', col('created_at')), 'item'],
           order: [[fn('count', '*'), 'desc']],
           limit: 10
@@ -194,8 +207,15 @@ class ErrDbsController extends Controller {
             ['content', 'item'],
             [fn('count', col('content')), 'count'],
           ],
+          where: {
+            createdAt: {
+              [Op.lt]: new Date(),
+              [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000 * timeRange)
+            }
+          },
           group: 'content',
           order: [[fn('count', col('content')), 'desc']],
+          limit: 10
         }
         break;
       // 异常浏览器，但需要解析浏览器字符串
@@ -205,7 +225,14 @@ class ErrDbsController extends Controller {
             ['user_agent', 'item'],
             [fn('count', col('user_agent')), 'count'],
           ],
-          group: 'user_agent'
+          where: {
+            createdAt: {
+              [Op.lt]: new Date(),
+              [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000 * timeRange)
+            }
+          },
+          group: 'user_agent',
+          limit: 10
         }
         break;
       default: 
@@ -225,6 +252,49 @@ class ErrDbsController extends Controller {
     // 返回的是模型实例，可以直接调用几个数组方法，但。。。需注意，无法直接调用
     let totalDbs = await ctx.sqlModel.models.err_dbs.findAll(totalQuery);
     let total = JSON.parse(JSON.stringify(totalDbs))[0].total;
+
+    let res = {
+      list,
+      total,
+    }
+
+    await ctx.reqHandler.success(res);
+  }
+  async getErrList() {
+    const { ctx, app } = this;
+    const { timeRange, pageSize, pageNo } = ctx.request.body
+    // fn是聚合，Op是运算对象，里面还有Op.or，Op.eq等等，
+    const { fn, col } = app.Sequelize;
+
+    let sequelize = ctx.sqlModel.models.err_dbs.sequelize;
+    // 选择近几天，
+    let listQuery = `
+      select * from err_dbs e
+      where date_sub(curdate(), interval ${timeRange} day) <= date(e.created_at) && date(e.created_at) <= curdate()
+      order by created_at desc
+      limit ${pageSize}
+      offset ${pageSize * (pageNo - 1)}
+    `
+    let list = await sequelize.query(listQuery).spread((results, metadata) => results);
+    // 使用sql语句后无法自动转换驼峰，这里手动转换一次
+    list = list.map(item => ctx.helper.objKeyToHump(item))
+    // let list = await ctx.sqlModel.models.err_dbs.findAll(query);
+
+    // let totalQuery = {
+    //   attributes: [
+    //     [fn('count', '*'), 'total']
+    //   ]
+    // }
+    // // 返回的是模型实例，可以直接调用几个数组方法，但。。。需注意，无法直接调用
+    // let totalDbs = await ctx.sqlModel.models.err_dbs.findAll(totalQuery);
+    // let total = JSON.parse(JSON.stringify(totalDbs))[0].total;
+
+    let totalQuery = `
+      select count(*) total from err_dbs e
+      where date_sub(curdate(), interval ${timeRange} day) <= date(e.created_at) && date(e.created_at) <= curdate()
+    `
+    let total = await sequelize.query(totalQuery).spread((results, metadata) => results[0].total);
+
 
     let res = {
       list,

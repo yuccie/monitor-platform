@@ -36,10 +36,10 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="queryData.pageNo"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="10"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="total"
         ></el-pagination>
       </div>
     </div>
@@ -49,7 +49,7 @@
 <script>
 import dayjs from 'dayjs';
 import UaParser from 'ua-parser-js';
-import { getSqlErr, getErrTrand, delErrDetail } from '@apis/';
+import { getErrList, getErrTrand, delErrDetail } from '@apis/';
 
 import TrendChart from './components/TrendChart';
 import LayoutHeader from '@layoutApp/header/header';
@@ -65,50 +65,71 @@ export default {
       queryData: {
         pageSize: 10,
         pageNo: 1,
-        timeRange: 7
+        timeRange: 30
       },
-      trendChartData: []
+      trendChartData: [],
+      total: 0
     };
   },
   watch: {
     'queryData.timeRange'(newVal) {
+      this.queryData.pageSize = 10;
+      this.queryData.pageNo = 1;
       this.getErrTrand();
+      this.getErrList();
     }
   },
   methods: {
-    goDetail({id}) {
+    goDetail({ id }) {
       let query = {
         id
-      }
+      };
       this.$router.push({ name: 'ErrDetail', query });
     },
     async delErrDetail(scope) {
-      console.log(scope, 'tableData');
+
       let { $index } = scope;
       let { id } = scope.row;
 
-      try {
-        let res = await delErrDetail({id});
-        if (res) {
-          // 成功从当前列表删除该元素
-          this.tableData.splice($index,1);
-        }
-      } catch (err) {
-        console.log(err);
-      }
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          try {
+            let res = await delErrDetail({ id });
+            if (res) {
+              // 成功从当前列表删除该元素
+              this.tableData.splice($index, 1);
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
     },
     handleSizeChange(val) {
       this.queryData.pageSize = val;
-      this.handleErrTypeChange();
+      this.getErrList();
     },
     handleCurrentChange(val) {
       this.queryData.pageNo = val;
-      this.handleErrTypeChange();
+      this.getErrList();
     },
-    async handleErrTypeChange() {
+    async getErrList() {
       try {
-        let res = await getSqlErr(this.queryData);
-        if (res.code === 0) {
+        let res = await getErrList(this.queryData);
+        if (res && res.code === 0) {
           this.tableData = res.data.list.map(item => {
             if (item.userAgent) {
               let UA = UaParser(item.userAgent);
@@ -120,6 +141,7 @@ export default {
             item.createdAt = new Date(Number(item.timestamp)).toLocaleString();
             return item;
           });
+          this.total = res.data.total;
         }
       } catch (err) {}
     },
@@ -129,13 +151,6 @@ export default {
           timeRange: this.queryData.timeRange
         };
         let res = await getErrTrand(query);
-        // let leftArr = Array(17).fill(0).map((item, idx) => {
-        //   return {
-        //     count: Math.floor(Math.random()*100),
-        //     date: `2020-05-${idx + 1}`
-        //   }
-        // })
-        // this.trendChartData = leftArr.concat(res.data);
         this.trendChartData = res.data;
 
         console.log(res);
@@ -145,7 +160,7 @@ export default {
     }
   },
   created() {
-    this.handleErrTypeChange();
+    this.getErrList();
     this.getErrTrand();
   }
 };

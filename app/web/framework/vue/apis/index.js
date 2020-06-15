@@ -45,9 +45,15 @@ export function getPerf(data) {
 }
 
 // 获取mysql里的异常数据
-export function getSqlErr(data) {
+export function getTypeErr(data) {
   return request({
-    url: `/getSqlErr`,
+    url: `/getTypeErr`,
+    data,
+  });
+}
+export function getErrList(data) {
+  return request({
+    url: `/getErrList`,
     data,
   });
 }
@@ -125,7 +131,8 @@ export function delErrDetail(data) {
 export function getSourceMap(data) {
   return request({
     url: `/getSourceMap`,
-    method: 'get',
+    method: 'post',
+    data: data
   });
 }
 

@@ -6,6 +6,7 @@
     "debug": "egg-bin debug",
     "clean": "easy clean",
     "build": "easy build prod && node build/errSdkConf.js",
+    "buildErrSdk": "node build/errSdkConf.js",
     "zip": "npm run build && easy zip --deps --target ./zip",
     "start": "egg-scripts start --daemon",
     "dev": "egg-bin dev",

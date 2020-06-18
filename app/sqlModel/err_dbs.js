@@ -2,7 +2,7 @@
 
 module.exports = async app => {
   // 解构出数据类型
-  const { STRING, INTEGER, DATE, ARRAY } = app.Sequelize;
+  const { STRING, INTEGER, DATE, ARRAY, TEXT } = app.Sequelize;
   // 表名
   const tableName = 'err_dbs';
 
@@ -21,7 +21,7 @@ module.exports = async app => {
       url: STRING,
       errorLevel: INTEGER,
       // 数据库中无法储存数组，直接将数组序列化存入
-      stack: STRING(10000),
+      stack: STRING(5000),
       // stack: [
       //   {
       //     columnNumber: INTEGER,
@@ -33,9 +33,9 @@ module.exports = async app => {
       // ],
       lineNumber: INTEGER,
       columnNumber: INTEGER,
-      fileName: STRING,
-      recentClickEventList: STRING(10000),
-      recentAjaxList: STRING(10000),
+      fileName: STRING(1000),
+      recentClickEventList: TEXT,
+      recentAjaxList: TEXT,
       timestamp: STRING,
       // cookies: STRING,
       userAgent: STRING,
@@ -54,7 +54,9 @@ module.exports = async app => {
 
   // await ErrDbs.drop();
   // 这种操作确实暴力，直接把原来的数据给干掉了
+  // await ErrDbs.sync();
   await ErrDbs.sync({alter: true});
+    // await ErrDbs.sync({ force: true }); // 删除表的数据
 
   return ErrDbs;
 };

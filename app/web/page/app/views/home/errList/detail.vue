@@ -230,6 +230,7 @@
 import Vue from 'vue';
 import LayoutHeader from '@layoutApp/header/header';
 import { getErrDetail, getSourceMap } from '@apis/';
+import { getType } from '@utils/'
 import UAParser from 'ua-parser-js';
 
 // 语法高亮，需要css样式
@@ -237,7 +238,7 @@ import hljs from 'highlight.js/lib/core';
 import 'highlight.js/styles/github.css';
 
 sourceMap.SourceMapConsumer.initialize({
-  'lib/mappings.wasm': `/public/static/sourcemap/0.7.0/mappings.wasm`
+  'lib/mappings.wasm': `/public/sourcemap/0.7.0/mappings.wasm`
 });
 
 Vue.directive('highlightjs', {
@@ -288,12 +289,28 @@ export default {
 
   computed: {
     recentClickEventList() {
-      let list = JSON.parse(this.errorDetail.recentClickEventList);
-      return list.reverse();
+      let recentClickEventList = this.errorDetail.recentClickEventList;
+
+      if (getType(recentClickEventList) === 'String') {
+        recentClickEventList = JSON.parse(this.errorDetail.recentClickEventList);
+      }
+      if (recentClickEventList) {
+        return recentClickEventList.reverse();
+      } else {
+        return [];
+      }
     },
     recentAjaxList() {
-      let list = JSON.parse(this.errorDetail.recentAjaxList);
-      return list.reverse();
+      let recentAjaxList = this.errorDetail.recentAjaxList;
+
+      if (getType(recentAjaxList) === 'String') {
+        recentAjaxList = JSON.parse(this.errorDetail.recentAjaxList);
+      }
+      if (recentAjaxList) {
+        return recentAjaxList.reverse();
+      } else {
+        return [];
+      }
     },
     routeQuery() {
       return this.$route.query;
@@ -485,10 +502,13 @@ export default {
           color: rgb(74, 74, 74);
           &:first-child {
             color: rgb(157, 157, 161);
-            word-break: break-word;
             padding-right: 10px;
             min-width: 50px;
             text-align: left;
+          }
+          &:nth-child(2) {
+            word-break: break-word;
+            line-height: 1.5;
           }
         }
       }

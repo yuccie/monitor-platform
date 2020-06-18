@@ -15,19 +15,10 @@ class ErrService extends Service {
     const { timeRange } = query;
 
     let sequelize = ctx.sqlModel.models.err_dbs.sequelize;
-
-    // 近7天
-    // let sqlQuery = `
-    //   select date_format(created_at, '%Y-%m-%d') date,count(*) count from err_dbs
-    //   where date_sub(CURDATE(),INTERVAL ${timeRange} DAY) <= DATE(created_at)
-    //   group by date_format(created_at, '%Y-%m-%d')
-    //   order by date_format(created_at, '%Y-%m-%d')
-    // `;
-    // left outer join date_dbs d
     
-    // 这样的count(*)，为何每个没有数据也都统计出来2个？
+    // 这样的count(*)，为何每个没有数据也都统计出来2个？因为date_dbs的数据有重复的问题
     let sqlQuery = `
-      select date_format(d.create_time, '%Y-%m-%d') date, count(*) count from date_dbs d
+      select date_format(d.create_time, '%Y-%m-%d') date, count(e.id) count from date_dbs d
       left join err_dbs e
       on date_format(d.create_time, '%Y-%m-%d') = date_format(e.created_at, '%Y-%m-%d')
       where date_sub(curdate(), interval ${timeRange} day) <= date(d.create_time) && date(d.create_time) <= curdate()
@@ -62,6 +53,8 @@ class ErrService extends Service {
       // }
       temp = ctx.helper.objKeyToHump(results[0]);
       temp.stack = JSON.parse(temp.stack)
+      temp.recentClickEventList = JSON.parse(temp.recentClickEventList)
+      temp.recentAjaxList = JSON.parse(temp.recentAjaxList)
       return temp;
     });
 

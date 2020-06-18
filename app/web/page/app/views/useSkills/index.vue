@@ -23,7 +23,7 @@
         <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
       </div>
       <div class="item">
-        <el-button type="primary" round @click="getSqlErr">获取异常数据</el-button>
+        <el-button type="primary" round @click="getErrList">获取异常数据</el-button>
         <el-button type="success" round @click="delSqlErr">删除异常数据</el-button>
         <el-button type="success" round @click="updateSqlErr">更新异常数据</el-button>
         <el-button type="info" round>待定</el-button>
@@ -77,7 +77,7 @@ import {
   delErr,
   updateErr,
   getPerf,
-  getSqlErr,
+  getErrList,
   delSqlErr,
   updateSqlErr,
   getRedisErr,
@@ -89,7 +89,7 @@ const fnMap = {
   delErr,
   updateErr,
   getPerf,
-  getSqlErr,
+  getErrList,
   delSqlErr,
   updateSqlErr,
   getRedisErr,
@@ -187,7 +187,7 @@ export default {
       'delErr',
       'updateErr',
       'getPerf',
-      'getSqlErr',
+      'getErrList',
       'delSqlErr',
       'updateSqlErr',
       'getRedisErr',

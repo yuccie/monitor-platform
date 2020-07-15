@@ -13,7 +13,6 @@ import '../asset/js/sdk';
 // 服务端渲染时没有window，会尝试客户端渲染
 Vue.use(window.monitor.vuePlugin);
 
-// 
 // Vue.config.errorHandler = (err, vm, info) => {
 //   // throw new Error(err);
 //   let { message, name, script, line, column, stack } = err;
@@ -51,7 +50,6 @@ export default class App {
 
   client() {
     Vue.prototype.$http = require('axios');
-    console.log(2)
     const options = this.create(window.__INITIAL_STATE__);
     const { router, store } = options;
     console.log(store.state.origin);

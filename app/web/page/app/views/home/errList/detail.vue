@@ -7,7 +7,7 @@
         <el-card class="card">
           <div slot="header" class="clearfix">
             <strong>错误信息</strong>
-            <el-switch class="switch" v-model="source" active-color="#13ce66" inactive-color="#eee"></el-switch>
+            <el-switch class="switch" :disabled="sourceDis" v-model="source" active-color="#13ce66" inactive-color="#eee"></el-switch>
 
             <!-- @focus="abortGetSourcemapContent" -->
             <el-input
@@ -283,7 +283,8 @@ export default {
       originalStack: [],
       fileContent: '',
       fileErrorCode: '',
-      prevSourceMapURL: ''
+      prevSourceMapURL: '',
+      sourceDis: false
     };
   },
 
@@ -295,7 +296,7 @@ export default {
         recentClickEventList = JSON.parse(this.errorDetail.recentClickEventList);
       }
       if (recentClickEventList) {
-        return recentClickEventList.reverse();
+        return recentClickEventList;
       } else {
         return [];
       }
@@ -307,7 +308,7 @@ export default {
         recentAjaxList = JSON.parse(this.errorDetail.recentAjaxList);
       }
       if (recentAjaxList) {
-        return recentAjaxList.reverse();
+        return recentAjaxList;
       } else {
         return [];
       }
@@ -327,9 +328,11 @@ export default {
 
   methods: {
     async getErrDetail() {
+
       let reqData = {
         id: this.routeQuery.id
       };
+
       try {
         let res = await getErrDetail(reqData);
         if (res) {
@@ -339,7 +342,10 @@ export default {
           item.disOs = `${item.userAgent.os.name} ${item.userAgent.os.version}`;
           this.sourceMapUrl = item.fileName + '.map';
           this.errorDetail = item;
-          // this.getFileContent();
+          // 如果是资源加载、HTTP请求、promise错误等，暂时没有sourceMap文件
+          if (['XMLHttpRequest', 'PromiseRejectionEvent', 'Event'].includes(item.errorType)) {
+            this.sourceDis = true;
+          }
         }
       } catch (err) {
         console.log(err);

@@ -125,9 +125,16 @@ export default {
       try {
         // let res = await getErr(reqData);
         let res = await getTypeErr(reqData);
-        if (res.data.list.length) {
+        const { list } = res.data;
+        if (res && list) {
+          if (!list.length) {
+            this.errChartData = [];
+            return false;
+          }
+
           this.errChartData = res.data.list.map(item => {
             if (this.errType === 2) {
+              // 
               // g2 的图例是根据数据类型自动生成的，因此为了不生成连续图例，特地修改如下
               item.item = `日期：${item.item}`;
             }

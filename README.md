@@ -1,5 +1,11 @@
 # egg-vue-webpack-boilerplate
 
+## 问题总结
+
+### model_mongodb目录
+
+正常情况下，egg项目的数据库目录应该在model目录，但是本项目起初是支持 mongodb 和 mysql 的，但为了后续的可扩展性，统一改为了mysql，但依然保留了mongodb的数据库目录也就是 model，为了不让egg项目自动遍历model目录，这里改为了model_mongodb
+
 基于 Egg + Vue + Webpack 单页面服务端渲染(SSR)同构工程骨架项目
 
 ## 文档

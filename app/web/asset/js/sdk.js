@@ -202,7 +202,9 @@ function onReadyStateChangeReplacement() {
     error.errorType = _getValType(this) || '';
     error.recentClickEventList = JSON.stringify(recentClickEventList);
     error.recentAjaxList = JSON.stringify(recentAjaxList);
-    collect(error, `${error.url}-${error.message}`);
+    if (recentAjaxList.length && recentAjaxList[0].api.indexOf('sockjs-node/info') === -1 ) {
+      collect(error, `${error.url}-${error.message}`);
+    }
     return false;
   }
 

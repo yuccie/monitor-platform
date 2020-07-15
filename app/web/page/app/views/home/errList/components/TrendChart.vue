@@ -32,7 +32,6 @@ export default {
   },
   methods: {
     initChart(data) {
-      
       const chart = new Chart({
         container: this.$refs.chartDemo,
         autoFit: true,
@@ -47,7 +46,7 @@ export default {
         date: {
           // min: 0,
           // max: 100
-          nice: true,
+          nice: true
           // range: [0.15, 0.15],
         },
         count: {
@@ -56,17 +55,17 @@ export default {
           nice: true
         }
       });
-      chart.legend('item',{
+      chart.legend('item', {
         title: null,
-        position: 'bottom-center',
+        position: 'bottom-center'
         // marker: 'square',
         // itemFormatter(val) {
         //   console.log('val', val)
         //   return val;
         // }
         // offsetX: 10,
-      }); 
-      chart.coordinate('rect').scale(0.95, 1); 
+      });
+      chart.coordinate('rect').scale(0.95, 1);
 
       // 竖轴的刻度线是否显示，多个竖轴只需显示最大的那个即可
       // chart.axis('nlp', false);
@@ -79,7 +78,7 @@ export default {
             name: '异常数量',
             value: 'count',
             marker: { symbol: 'circle', style: { stroke: '#1890ff', lineWidth: 2 } }
-          },
+          }
           // { name: 'nlp', value: 'nlp', marker: { symbol: 'circle', style: { stroke: '#2fc25b', lineWidth: 2 } } }
         ]
       });
@@ -88,50 +87,31 @@ export default {
       chart
         .line()
         .position('date*count')
+        .tooltip('date*count', (date, count) => {
+          return {
+            date: `${date}：`,
+            count: `异常数量${count}`
+          };
+        })
         .color('#1890ff')
         .shape('smooth')
-        .label('count')
-      // chart
-      //   .line()
-      //   .position('date*nlp')
-      //   .color('#2fc25b');
+        .label('count');
 
-      // 图表上着重的标明的点
-      // chart.annotation().dataMarker({
-      //   top: true,
-      //   position: ['2016-02-28', 9],
-      //   text: {
-      //     content: 'count 首超 NLP',
-      //     style: {
-      //       textAlign: 'left'
-      //     }
-      //   },
-      //   line: {
-      //     length: 30
-      //   }
-      // });
-      // chart.annotation().dataMarker({
-      //   top: true,
-      //   position: ['2017-12-17', 100],
-      //   line: {
-      //     length: 30
-      //   },
-      //   text: {
-      //     content: '2017-12-17, 受比特币影响，\n count搜索热度达到顶峰\n峰值：100',
-      //     style: {
-      //       textAlign: 'right'
-      //     }
-      //   }
-      // });
+      chart.tooltip({
+        showCrosshairs: true, // 展示 Tooltip 辅助线
+        shared: true,
+        showTitle: false,
+        itemTpl: '<li>{date}{count}</li>'
+      });
+
       chart.removeInteraction('legend-filter'); // 自定义图例，移除默认的分类图例筛选交互
       chart.render();
     },
     changeData(newData) {
       if (this.chart) {
         this.chart.data(newData);
-        this.chart.render()
+        this.chart.render();
       }
-
     }
   },
   mounted() {

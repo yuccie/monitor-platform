@@ -47,14 +47,14 @@ module.exports = app => {
   };
 
   // 增加mongoose
-  exports.mongoose = {
-    clients: {
-      monitor: {
-        url: 'mongodb://monitorOwner:123456@127.0.0.1:27017/monitor',
-        options: {},
-      },
-    },
-  };
+  // exports.mongoose = {
+  //   clients: {
+  //     monitor: {
+  //       url: 'mongodb://monitorOwner:123456@127.0.0.1:27017/monitor',
+  //       options: {},
+  //     },
+  //   },
+  // };
 
   exports.sequelize = require('../database/config.json').development;
 

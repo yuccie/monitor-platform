@@ -22,6 +22,11 @@ module.exports = app => {
   app.post('/delErrDetail', app.controller.err.delErrDetail); // 删除单条异常数据
   app.post('/getSourceMap', app.controller.err.getSourceMap); // 获取单条异常数据的sourceMap
 
+  // 性能监控
+  app.post('/updatePerfTimes', app.controller.perf.updatePerfTimes); // 获取单条异常数据的sourceMap
+  app.post('/getTypePerf', app.controller.perf.getTypePerf); // 获取不同类型耗时最高的项，前几项，比如dom下载时间最长的几项
+  app.post('/getPerfList', app.controller.perf.getPerfList); // 获取不同类型耗时最高的项，前几项，比如dom下载时间最长的几项
+
   // 操作redis里的方法
   app.get('/getRedisErr', app.controller.err.getRedisErr);
   app.get('/delRedisErr', app.controller.err.delRedisErr);

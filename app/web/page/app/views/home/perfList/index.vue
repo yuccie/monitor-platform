@@ -5,23 +5,29 @@
     </LayoutHeader>
 
     <!-- 走势图 -->
-    <TrendChart :chartData="trendChartData" />
+    <!-- <TrendChart :chartData="trendChartData" /> -->
 
     <!-- <div class="action-box">
       <el-button @click=""  type="primary" size="small">刷新</el-button>
     </div>-->
 
     <div class="main-box">
-      <el-table :max-height="600" :data="tableData" border style="width: 100%;">
+      <el-table :max-height="600" :data="tableData" border style="width: 100%;" @sort-change="sortChange" >
         <el-table-column align="center" type="index" label="#"></el-table-column>
-        <el-table-column align="center" prop="name" label="NAME"></el-table-column>
-        <el-table-column align="center" prop="message" label="MESSAGE" width="300"></el-table-column>
-        <el-table-column align="center" prop="url" label="URL" width="200"></el-table-column>
-        <el-table-column align="center" prop="errorType" label="TYPE" width="100"></el-table-column>
-        <el-table-column align="center" prop="browser" label="BROWSER"></el-table-column>
-        <el-table-column align="center" prop="os" label="OS"></el-table-column>
-        <el-table-column align="center" prop="host" label="IP"></el-table-column>
-        <el-table-column align="center" prop="createdAt" label="TIME" width="115"></el-table-column>
+        <el-table-column sortable="sortable" align="center" prop="name" label="项目"></el-table-column>
+        <el-table-column sortable="sortable" align="center" prop="unloadDur" label="页面卸载耗时"></el-table-column>
+        <el-table-column sortable="sortable" align="center" prop="redirectDur" label="重定向耗时" ></el-table-column>
+        <el-table-column sortable="sortable" align="center" prop="appCacheDur" label="查询缓存耗时" ></el-table-column>
+        <el-table-column sortable="sortable" align="center" prop="dnsDur" label="dns耗时" ></el-table-column>
+        <el-table-column sortable="sortable" align="center" prop="requestDur" label="tcp连接耗时"></el-table-column>
+        <el-table-column sortable="sortable" align="center" prop="responseDur" label="response响应耗时" width="200"></el-table-column>
+        <el-table-column sortable="sortable" align="center" prop="domContentLoadedDur" label="dom加载耗时"></el-table-column>
+        <el-table-column sortable="sortable" align="center" prop="loadDur" label="页面资源加载耗时" width="200"></el-table-column>
+        <el-table-column sortable="sortable" align="center" prop="date" label="日期" width="115">
+          <template slot-scope="scope">
+            {{ new Date(scope.row.date).toLocaleString() }}
+          </template>
+        </el-table-column>
 
         <el-table-column align="center" fixed="right" label="操作" width="100">
           <template slot-scope="scope">
@@ -49,25 +55,27 @@
 <script>
 import dayjs from 'dayjs';
 import UaParser from 'ua-parser-js';
-import { getErrList, getErrTrand, delErrDetail } from '@apis/';
+import { getPerfList, getErrTrand, delErrDetail } from '@apis/';
 
-import TrendChart from './components/TrendChart';
+// import TrendChart from './components/TrendChart';
 import LayoutHeader from '@layoutApp/header/header';
 import TimerSelector from '../components/TimerSelector';
 
 import { tableData } from './data';
 
 export default {
-  components: { TrendChart, LayoutHeader, TimerSelector },
+  components: { LayoutHeader, TimerSelector },
   data() {
     return {
       tableData,
       queryData: {
         pageSize: 10,
         pageNo: 1,
-        timeRange: 30
+        timeRange: 30,
+        order: 'desc',
+        orderProp: 'date'
       },
-      trendChartData: [],
+      // trendChartData: [],
       total: 0
     };
   },
@@ -75,11 +83,17 @@ export default {
     'queryData.timeRange'(newVal) {
       this.queryData.pageSize = 10;
       this.queryData.pageNo = 1;
-      this.getErrTrand();
-      this.getErrList();
+      // this.getErrTrand();
+      this.getPerfList();
     }
   },
   methods: {
+    sortChange({prop, order}) {
+      this.queryData.orderProp = prop;
+      let tempOrder = order === 'ascending' ? 'asc' : 'desc'
+      this.queryData.order = tempOrder;
+      this.getPerfList();
+    },
     goDetail({ id }) {
       let query = {
         id
@@ -120,15 +134,15 @@ export default {
     },
     handleSizeChange(val) {
       this.queryData.pageSize = val;
-      this.getErrList();
+      this.getPerfList();
     },
     handleCurrentChange(val) {
       this.queryData.pageNo = val;
-      this.getErrList();
+      this.getPerfList();
     },
-    async getErrList() {
+    async getPerfList() {
       try {
-        let res = await getErrList(this.queryData);
+        let res = await getPerfList(this.queryData);
         if (res && res.code === 0) {
           this.tableData = res.data.list.map(item => {
             if (item.userAgent) {
@@ -160,8 +174,8 @@ export default {
     }
   },
   created() {
-    this.getErrList();
-    this.getErrTrand();
+    this.getPerfList();
+    // this.getErrTrand();
   }
 };
 </script>

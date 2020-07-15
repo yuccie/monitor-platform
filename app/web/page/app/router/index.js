@@ -27,6 +27,16 @@ export default function createRouter() {
         name: 'ErrDetail',
         component: () => import('../views/home/errList/detail'),
       },
+      {
+        path: '/perfList',
+        name: 'PerfList',
+        component: () => import('../views/home/perfList/'),
+      },
+      {
+        path: '/perfDetail',
+        name: 'PerfDetail',
+        component: () => import('../views/home/perfList/detail'),
+      },
 
 
       {

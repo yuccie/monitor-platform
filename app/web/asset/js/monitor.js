@@ -6,7 +6,7 @@
 var stackparser = require('./stackparser');
 function Monitor() {
   // this._api = API_ROOT_URL + '/push';
-  this._api = `http://172.16.185.224:7001/updateSqlErr`;
+  this._api = `http://127.0.0.1:7001/updateSqlErr`;
   this._handlers = {
     pushSuccess(data) {
       console.log('推送异常至服务器成功');

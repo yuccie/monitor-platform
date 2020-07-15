@@ -289,11 +289,20 @@ export default {
   computed: {
     recentClickEventList() {
       let list = JSON.parse(this.errorDetail.recentClickEventList);
-      return list.reverse();
+      if (list) {
+        return list.reverse();
+      } else {
+        return [];
+      }
+      
     },
     recentAjaxList() {
       let list = JSON.parse(this.errorDetail.recentAjaxList);
-      return list.reverse();
+      if (list) {
+        return list.reverse();
+      } else {
+        return [];
+      }
     },
     routeQuery() {
       return this.$route.query;

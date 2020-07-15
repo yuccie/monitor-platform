@@ -160,6 +160,7 @@ class ErrDbsController extends Controller {
   async getTypeErr() {
     const { ctx, app } = this;
     let { errType, timeRange } = ctx.request.body;
+    let sequelize = ctx.sqlModel.models.err_dbs.sequelize;
 
     // fn是聚合，Op是运算对象，里面还有Op.or，Op.eq等等，
     const { fn, col, Op } = app.Sequelize;
@@ -204,8 +205,8 @@ class ErrDbsController extends Controller {
       case 3:
         query = {
           attributes: [
-            ['content', 'item'],
-            [fn('count', col('content')), 'count'],
+            ['message', 'item'],
+            [fn('count', col('message')), 'count'],
           ],
           where: {
             createdAt: {
@@ -213,8 +214,8 @@ class ErrDbsController extends Controller {
               [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000 * timeRange)
             }
           },
-          group: 'content',
-          order: [[fn('count', col('content')), 'desc']],
+          group: 'message',
+          order: [[fn('count', col('message')), 'desc']],
           limit: 10
         }
         break;
@@ -244,18 +245,26 @@ class ErrDbsController extends Controller {
 
     let list = await ctx.sqlModel.models.err_dbs.findAll(query);
 
-    let totalQuery = {
-      attributes: [
-        [fn('count', '*'), 'total']
-      ]
-    }
-    // 返回的是模型实例，可以直接调用几个数组方法，但。。。需注意，无法直接调用
-    let totalDbs = await ctx.sqlModel.models.err_dbs.findAll(totalQuery);
-    let total = JSON.parse(JSON.stringify(totalDbs))[0].total;
+    // let totalQuery = {
+    //   attributes: [
+    //     [fn('count', '*'), 'total']
+    //   ]
+    // }
+    // // 返回的是模型实例，可以直接调用几个数组方法，但。。。需注意，无法直接调用
+    // let totalDbs = await ctx.sqlModel.models.err_dbs.findAll(totalQuery);
+    // let total = JSON.parse(JSON.stringify(totalDbs))[0].total;
+    
+    // 查询近几天的数据总和，其实就是某一天在某个范围内，只需大于下边界，小于上边界即可
+    let totalQuery1 = `
+      select count(*) total from err_dbs e
+      where date_sub(curdate(), interval ${timeRange} day) <= date(e.created_at) && date(e.created_at) <= curdate()
+    `
+    let resTotal = await sequelize.query(totalQuery1).spread((results, metadata) => results);;
+    resTotal.map(item => ctx.helper.objKeyToHump(item))
 
     let res = {
       list,
-      total,
+      total: resTotal[0].total,
     }
 
     await ctx.reqHandler.success(res);
@@ -316,7 +325,7 @@ class ErrDbsController extends Controller {
     let errInfo = ctx.request.body;
     errInfo.userAgent = ctx.request.header['user-agent'];
 
-    //   stack: STRING,
+    // stack: STRING,
     // recentClickEventList: STRING,
     // recentAjaxList: STRING,
     errInfo.stack = JSON.stringify(errInfo.stack)

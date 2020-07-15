@@ -9,8 +9,13 @@ exports.errTypes = [
 
 // 性能监控指标
 exports.perfTypes = [
-  {value: 'Queuing', label: 'Queuing'},
-  {value: 'TTFB', label: 'TTFB'},
-  {value: 'DOMContentLoaded', label: 'DOMContentLoaded'},
-  {value: 'loaded', label: 'loaded'},
+  {value: 'unloadEvent', label: '页面卸载'},
+  {value: 'redirect', label: '重定向'},
+  {value: 'appCache', label: '缓存查询'},
+  {value: 'domainLookup', label: 'DNS查询'},
+  {value: 'connect', label: 'TCP握手'},
+  {value: 'request', label: 'request建立'},
+  {value: 'response', label: 'response响应'},
+  {value: 'domContentLoadedEvent', label: 'dom加载'},
+  {value: 'loadEvent', label: '页面资源加载'},
 ]

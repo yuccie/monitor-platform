@@ -54,6 +54,7 @@ module.exports = {
   alias: {
     '@apis': 'app/web/framework/vue/apis/',
     'asset': 'app/web/asset',
+    '@utils': 'app/web/framework/utils/',
     '@layoutApp': 'app/web/component/layout/app',
   },
   // },

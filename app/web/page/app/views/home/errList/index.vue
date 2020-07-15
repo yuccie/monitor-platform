@@ -6,6 +6,7 @@
 
     <!-- 走势图 -->
     <TrendChart :chartData="trendChartData" />
+    <!-- <img src="http://404.png"> -->
 
     <!-- <div class="action-box">
       <el-button @click=""  type="primary" size="small">刷新</el-button>
@@ -27,10 +28,10 @@
           <template slot-scope="scope">
             <el-button @click="goDetail(scope.row)" type="text" size="small">详情</el-button>
             <el-button type="text" size="small" @click="delErrDetail(scope)">删除</el-button>
+            <el-button type="text" size="small" @click="createErr">error</el-button>
           </template>
         </el-table-column>
       </el-table>
-
       <div class="pagination-box">
         <el-pagination
           @size-change="handleSizeChange"
@@ -80,6 +81,10 @@ export default {
     }
   },
   methods: {
+    createErr() {
+      // console.log('相同的error', equalErr);
+      Promise.reject('promiseErr');
+    },
     goDetail({ id }) {
       let query = {
         id

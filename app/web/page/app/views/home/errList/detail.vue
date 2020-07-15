@@ -494,10 +494,13 @@ export default {
           color: rgb(74, 74, 74);
           &:first-child {
             color: rgb(157, 157, 161);
-            word-break: break-word;
             padding-right: 10px;
             min-width: 50px;
             text-align: left;
+          }
+          &:nth-child(2) {
+            word-break: break-word;
+            line-height: 1.5;
           }
         }
       }

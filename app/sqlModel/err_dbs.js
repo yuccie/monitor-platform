@@ -52,7 +52,9 @@ module.exports = async app => {
 
   // await ErrDbs.drop();
   // 这种操作确实暴力，直接把原来的数据给干掉了
+  // await ErrDbs.sync();
   await ErrDbs.sync({alter: true});
+    // await ErrDbs.sync({ force: true }); // 删除表的数据
 
   return ErrDbs;
 };

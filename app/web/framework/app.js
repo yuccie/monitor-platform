@@ -8,11 +8,19 @@ import ElementUI, { Message } from 'element-ui';
 Vue.use(ElementUI);
 Vue.prototype.$message = Message;
 
-
+// 异常监控
 import '../asset/js/sdk';
 // 服务端渲染时没有window，会尝试客户端渲染
 Vue.use(window.monitor.vuePlugin);
 
+// 性能监控
+// const perfMonitorSdk = require('../asset/js/performanceSdk') ;
+import perfMonitorSdk from '../asset/js/performanceSdk';
+perfMonitorSdk.init({
+  url: 'http://127.0.0.1:7001/updatePerfTimes'
+})
+
+// 
 // Vue.config.errorHandler = (err, vm, info) => {
 //   // throw new Error(err);
 //   let { message, name, script, line, column, stack } = err;

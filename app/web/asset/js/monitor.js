@@ -6,7 +6,7 @@
 var stackparser = require('./stackparser');
 function Monitor() {
   // this._api = API_ROOT_URL + '/push';
-  this._api = `http://10.0.0.226:7001/updateSqlErr`;
+  this._api = `http://127.0.0.1:7001/updateSqlErr`;
   this._handlers = {
     pushSuccess(data) {
       console.log('推送异常至服务器成功');
@@ -195,7 +195,7 @@ fn._getPosition = function() {
   return new Promise((resolve, reject) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
-
+        console.log('position', position);
         let latitude = position.coords.latitude
         let longitude = position.coords.longitude
         let data = {

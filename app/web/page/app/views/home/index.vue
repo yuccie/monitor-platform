@@ -47,7 +47,12 @@
               <el-button type="text" class="button" @click="goWhichDetail('perf')">查看详情</el-button>
             </div>
             <div class="btns">
-              <el-select size="mini" :disabled="true" v-model="perfType" placeholder="请选择监控类型">
+              <el-select
+                size="mini"
+                v-model="perfType"
+                placeholder="请选择监控类型"
+                @change="handlePerfTypeChange"
+              >
                 <el-option
                   v-for="item in perfTypes"
                   :key="item.value"
@@ -56,7 +61,7 @@
                 ></el-option>
               </el-select>
             </div>
-            <PerfChart />
+            <HeapAreaChart :chartOpt="heapAreaMapchartOpt"/>
           </el-card>
         </el-col>
 
@@ -85,30 +90,32 @@
 </template>
 
 <script>
-import { getErr, getTypeErr } from '@apis/';
+import { getErr, getTypeErr, getTypePerf } from '@apis/';
 import UaParser from 'ua-parser-js';
 import dayjs from 'dayjs';
 import LayoutHeader from '@layoutApp/header/header';
 import ErrChart from './components/ErrChart';
+import HeapAreaChart from './components/HeapAreaChart';
 import PerfChart from './components/PerfChart';
 import MaiDianChart from './components/MaiDianChart';
 import PlatformChart from './components/PlatformChart';
-import TimerSelector from './components/TimerSelector'
+import TimerSelector from './components/TimerSelector';
 import { errTypes, perfTypes } from './data';
 
 export default {
-  components: { ErrChart, PerfChart, MaiDianChart, PlatformChart, LayoutHeader, TimerSelector },
+  components: { ErrChart, HeapAreaChart, PerfChart, MaiDianChart, PlatformChart, LayoutHeader, TimerSelector },
   data() {
     return {
       errTypes,
       perfTypes,
       errType: 2,
-      perfType: '',
+      perfType: 'unloadEvent',
       errChartData: [],
       restaurants: [],
       state1: '',
       state2: '',
-      timeRange: 7
+      timeRange: 7,
+      heapAreaMapchartOpt: []
     };
   },
   watch: {
@@ -150,7 +157,7 @@ export default {
           this.$router.push({ name: 'ErrList' });
           break;
         case 'perf':
-          this.$router.push({ name: 'ErrDetail' });
+          this.$router.push({ name: 'PerfList' });
           break;
         case 'point':
           this.$router.push({ name: 'ErrDetail' });
@@ -242,10 +249,28 @@ export default {
     },
     handleSelect(item) {
       console.log(item);
+    },
+    handlePerfTypeChange() {
+      let reqData = {
+        timeRange: this.timeRange,
+        perfType: this.perfType
+      };
+
+      this.getTypePerf(reqData);
+    },
+    async getTypePerf(reqData) {
+      try {
+        let res = await getTypePerf(reqData);
+        this.heapAreaMapchartOpt = res.data;
+      } catch (err) {
+        console.log(err);
+      } finally {
+      }
     }
   },
   created() {
     this.handleErrTypeChange();
+    this.handlePerfTypeChange();
     this.createDiffErrs();
   },
   mounted() {
@@ -270,7 +295,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         border-bottom: 1px solid #ccc;
       }
       .btns {

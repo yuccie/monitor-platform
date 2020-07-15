@@ -136,3 +136,23 @@ export function getSourceMap(data) {
   });
 }
 
+
+
+// 获取 性能相关的接口
+// 获取不同类型耗时最高的项
+export function getTypePerf(data) {
+  return request({
+    url: `/getTypePerf`,
+    method: 'post',
+    data: data
+  });
+}
+// 获取页面加载情况数据
+export function getPerfList(data) {
+  return request({
+    url: `/getPerfList`,
+    method: 'post',
+    data: data
+  });
+}
+

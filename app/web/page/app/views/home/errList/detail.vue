@@ -230,7 +230,6 @@
 import Vue from 'vue';
 import LayoutHeader from '@layoutApp/header/header';
 import { getErrDetail, getSourceMap } from '@apis/';
-import { getType } from '@utils/'
 import UAParser from 'ua-parser-js';
 
 // 语法高亮，需要css样式
@@ -238,7 +237,7 @@ import hljs from 'highlight.js/lib/core';
 import 'highlight.js/styles/github.css';
 
 sourceMap.SourceMapConsumer.initialize({
-  'lib/mappings.wasm': `/public/sourcemap/0.7.0/mappings.wasm`
+  'lib/mappings.wasm': `/public/static/sourcemap/0.7.0/mappings.wasm`
 });
 
 Vue.directive('highlightjs', {
@@ -300,6 +299,7 @@ export default {
       } else {
         return [];
       }
+      
     },
     recentAjaxList() {
       let recentAjaxList = this.errorDetail.recentAjaxList;
